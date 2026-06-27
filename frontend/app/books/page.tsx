@@ -11,89 +11,74 @@ export default function BooksPage() {
 
   const [search, setSearch] = useState(initialSearch);
   const [category, setCategory] = useState(initialCategory);
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
 
   const categories = [
-    { name: 'همه', slug: '' },
-    { name: 'ادبیات فارسی', slug: 'persian-literature' },
-    { name: 'رمان', slug: 'novel' },
-    { name: 'تاریخ', slug: 'history' },
-    { name: 'فلسفه', slug: 'philosophy' },
-    { name: 'علمی', slug: 'science' },
-    { name: 'کودک و نوجوان', slug: 'children' },
-    { name: 'روانشناسی', slug: 'psychology' },
-    { name: 'مذهبی', slug: 'religious' },
-    { name: 'اقتصاد', slug: 'economics' },
-    { name: 'هنر', slug: 'art' },
+    { name: 'همه کتاب‌ها', slug: '', emoji: '📚' },
+    { name: 'ادبیات فارسی', slug: 'persian-literature', emoji: '📖' },
+    { name: 'رمان', slug: 'novel', emoji: '📕' },
+    { name: 'تاریخ', slug: 'history', emoji: '🏛️' },
+    { name: 'فلسفه', slug: 'philosophy', emoji: '💭' },
+    { name: 'علمی', slug: 'science', emoji: '🔬' },
+    { name: 'کودک و نوجوان', slug: 'children', emoji: '🧒' },
+    { name: 'روانشناسی', slug: 'psychology', emoji: '🧠' },
+    { name: 'مذهبی', slug: 'religious', emoji: '🕌' },
+    { name: 'اقتصاد', slug: 'economics', emoji: '📊' },
+    { name: 'هنر', slug: 'art', emoji: '🎨' },
   ];
+
+  const activeCategory = categories.find(c => c.slug === category);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">
-        {search ? `نتایج جستجو برای "${search}"` : 'همه کتاب‌ها'}
-      </h1>
+      {/* Page Header */}
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">
+          {search ? `نتایج جستجو برای "${search}"` : 'فروشگاه کتاب'}
+        </h1>
+        <p className="text-gray-500">
+          {activeCategory?.name || 'مشاهده همه کتاب‌ها'}
+        </p>
+      </div>
 
-      <div className="flex flex-col md:flex-row gap-6">
+      <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar Filters */}
-        <aside className="w-full md:w-64 shrink-0">
-          <div className="bg-white border border-gray-200 rounded-xl p-4 sticky top-24">
+        <aside className="w-full lg:w-72 shrink-0">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sticky top-24">
             {/* Search */}
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                جستجو
-              </label>
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="نام کتاب یا نویسنده..."
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none text-sm"
-              />
+              <label className="block text-sm font-bold text-gray-700 mb-3">جستجو</label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="نام کتاب یا نویسنده..."
+                  className="w-full px-4 py-2.5 pr-10 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white outline-none transition-all"
+                />
+                <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
             </div>
 
             {/* Categories */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                دسته‌بندی
-              </label>
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-3">دسته‌بندی</label>
               <div className="space-y-1">
                 {categories.map((cat) => (
                   <button
                     key={cat.slug}
                     onClick={() => setCategory(cat.slug)}
-                    className={`w-full text-right px-3 py-2 rounded-lg text-sm transition-colors ${
+                    className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm transition-all ${
                       category === cat.slug
-                        ? 'bg-primary-50 text-primary-700 font-medium'
-                        : 'text-gray-600 hover:bg-gray-50'
+                        ? 'bg-primary-50 text-primary-700 font-bold border border-primary-200'
+                        : 'text-gray-600 hover:bg-gray-50 border border-transparent'
                     }`}
                   >
+                    <span className="text-base">{cat.emoji}</span>
                     {cat.name}
                   </button>
                 ))}
-              </div>
-            </div>
-
-            {/* Price Range */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                محدوده قیمت
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="number"
-                  value={minPrice}
-                  onChange={(e) => setMinPrice(e.target.value)}
-                  placeholder="از"
-                  className="w-1/2 px-3 py-2 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary-500"
-                />
-                <input
-                  type="number"
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(e.target.value)}
-                  placeholder="تا"
-                  className="w-1/2 px-3 py-2 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary-500"
-                />
               </div>
             </div>
           </div>
