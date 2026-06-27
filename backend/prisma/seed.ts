@@ -216,6 +216,57 @@ async function main() {
 
   console.log(`✅ Created ${transactions.length} wallet transactions`);
 
+  // Sample Orders
+  const order1 = await prisma.order.create({
+    data: {
+      userId: customers[0].id,
+      status: 'DELIVERED',
+      totalAmount: allBooks[0].price + allBooks[4].price,
+      shippingAddress: { street: 'خیابان انقلاب، پلاک ۱۲۳', city: 'تهران', province: 'تهران', postalCode: '1234567890' },
+      items: {
+        create: [
+          { bookId: allBooks[0].id, sellerId: sellerProfiles[0].id, quantity: 1, unitPrice: allBooks[0].price, totalPrice: allBooks[0].price },
+          { bookId: allBooks[4].id, sellerId: sellerProfiles[1].id, quantity: 1, unitPrice: allBooks[4].price, totalPrice: allBooks[4].price },
+        ],
+      },
+    },
+  });
+
+  const order2 = await prisma.order.create({
+    data: {
+      userId: customers[1].id,
+      status: 'SHIPPED',
+      totalAmount: allBooks[8].price * 2,
+      shippingAddress: { street: 'خیابان ولیعصر، پلاک ۴۵۶', city: 'تهران', province: 'تهران', postalCode: '9876543210' },
+      items: {
+        create: [
+          { bookId: allBooks[8].id, sellerId: sellerProfiles[2].id, quantity: 2, unitPrice: allBooks[8].price, totalPrice: allBooks[8].price * 2 },
+        ],
+      },
+    },
+  });
+
+  const order3 = await prisma.order.create({
+    data: {
+      userId: customers[0].id,
+      status: 'PENDING',
+      totalAmount: allBooks[15].price,
+      shippingAddress: { street: 'خیابان آزادی، پلاک ۷۸۹', city: 'تهران', province: 'تهران', postalCode: '1122334455' },
+      items: {
+        create: [
+          { bookId: allBooks[15].id, sellerId: sellerProfiles[0].id, quantity: 1, unitPrice: allBooks[15].price, totalPrice: allBooks[15].price },
+        ],
+      },
+    },
+  });
+
+  // Update stock for ordered books
+  await prisma.book.update({ where: { id: allBooks[0].id }, data: { stock: { decrement: 1 } } });
+  await prisma.book.update({ where: { id: allBooks[4].id }, data: { stock: { decrement: 1 } } });
+  await prisma.book.update({ where: { id: allBooks[8].id }, data: { stock: { decrement: 2 } } });
+
+  console.log(`✅ Created 3 sample orders`);
+
   console.log('🎉 Seeding completed!');
   console.log('\n📋 Login credentials:');
   console.log('  Admin:    admin@booknest.ir / admin123');

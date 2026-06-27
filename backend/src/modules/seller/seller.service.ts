@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { CreateSellerProfileDto } from './dto/create-seller.dto';
+import { CreateSellerProfileDto } from './dto/seller.dto';
 
 @Injectable()
 export class SellerService {

@@ -24,6 +24,14 @@ export class UsersController {
     return this.usersService.findAll(page, limit);
   }
 
+  @Get('seller/stats')
+  @UseGuards(RolesGuard)
+  @Roles('SELLER')
+  @ApiOperation({ summary: 'آمار فروشنده' })
+  getSellerStats(@CurrentUser('id') userId: string) {
+    return this.usersService.getSellerStats(userId);
+  }
+
   @Get(':id')
   @UseGuards(RolesGuard)
   @Roles('ADMIN')
@@ -46,13 +54,5 @@ export class UsersController {
   @ApiOperation({ summary: 'تغییر نقش کاربر (مدیر)' })
   changeRole(@Param('id') id: string, @Body('role') role: Role) {
     return this.usersService.changeRole(id, role);
-  }
-
-  @Get('seller/stats')
-  @UseGuards(RolesGuard)
-  @Roles('SELLER')
-  @ApiOperation({ summary: 'آمار فروشنده' })
-  getSellerStats(@CurrentUser('id') userId: string) {
-    return this.usersService.getSellerStats(userId);
   }
 }
