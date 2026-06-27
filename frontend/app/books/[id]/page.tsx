@@ -6,6 +6,7 @@ import api from '@/lib/api';
 import { useCartStore } from '@/lib/cart-store';
 import { useAuthStore } from '@/lib/store';
 import toast from 'react-hot-toast';
+import ReviewForm from '@/components/books/ReviewForm';
 
 export default function BookDetailPage() {
   const params = useParams();
@@ -167,6 +168,11 @@ export default function BookDetailPage() {
               </div>
             </div>
           )}
+
+          {/* Review Form */}
+          <div className="mt-8">
+            <ReviewForm bookId={book.id} />
+          </div>
         </div>
       </div>
     </div>

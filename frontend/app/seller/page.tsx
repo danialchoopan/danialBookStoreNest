@@ -51,12 +51,20 @@ export default function SellerDashboardPage() {
         <h1 className="text-2xl font-bold text-gray-800">
           داشبورد فروشنده - {dashboard.shopName}
         </h1>
-        <Link
-          href="/seller/products"
-          className="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700"
-        >
-          مدیریت محصولات
-        </Link>
+        <div className="flex gap-2">
+          <Link
+            href="/seller/wallet"
+            className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700"
+          >
+            کیف پول
+          </Link>
+          <Link
+            href="/seller/products"
+            className="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700"
+          >
+            مدیریت محصولات
+          </Link>
+        </div>
       </div>
 
       {/* Stats */}

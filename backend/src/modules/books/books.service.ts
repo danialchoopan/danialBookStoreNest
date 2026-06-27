@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { RedisService } from '../../common/redis/redis.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { QueryBooksDto } from './dto/query-books.dto';
@@ -7,11 +8,18 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class BooksService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private redis: RedisService,
+  ) {}
 
   async findAll(query: QueryBooksDto) {
     const { search, category, minPrice, maxPrice, page = 1, limit = 20 } = query;
     const skip = (page - 1) * limit;
+
+    const cacheKey = `books:${search || ''}:${category || ''}:${minPrice || ''}:${maxPrice || ''}:${page}:${limit}`;
+    const cached = await this.redis.get<any>(cacheKey);
+    if (cached) return cached;
 
     const where: Prisma.BookWhereInput = {
       isPublished: true,
@@ -56,10 +64,13 @@ export class BooksService {
       reviews: undefined,
     }));
 
-    return {
+    const result = {
       data: booksWithRating,
       meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
     };
+
+    await this.redis.set(cacheKey, result, 300);
+    return result;
   }
 
   async findOne(id: string) {
@@ -100,7 +111,7 @@ export class BooksService {
       .replace(/[^a-z0-9\u0600-\u06FF]+/g, '-')
       .replace(/^-|-$/g, '');
 
-    return this.prisma.book.create({
+    const book = await this.prisma.book.create({
       data: {
         sellerId: sellerProfile.id,
         ...dto,
@@ -111,6 +122,9 @@ export class BooksService {
       },
       include: { categories: { include: { category: true } } },
     });
+
+    await this.redis.delPattern('books:*');
+    return book;
   }
 
   async update(sellerId: string, bookId: string, dto: UpdateBookDto) {
@@ -128,7 +142,7 @@ export class BooksService {
       await this.prisma.bookCategory.deleteMany({ where: { bookId } });
     }
 
-    return this.prisma.book.update({
+    const updated = await this.prisma.book.update({
       where: { id: bookId },
       data: {
         ...dto,
@@ -139,6 +153,9 @@ export class BooksService {
       },
       include: { categories: { include: { category: true } } },
     });
+
+    await this.redis.delPattern('books:*');
+    return updated;
   }
 
   async remove(sellerId: string, bookId: string) {
@@ -153,6 +170,7 @@ export class BooksService {
     }
 
     await this.prisma.book.delete({ where: { id: bookId } });
+    await this.redis.delPattern('books:*');
     return { message: 'کتاب با موفقیت حذف شد' };
   }
 }
