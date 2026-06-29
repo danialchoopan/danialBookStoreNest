@@ -1,3 +1,15 @@
+/**
+ * Root Layout - Application shell for all pages
+ *
+ * This layout wraps every page with:
+ * - RTL direction (lang="fa", dir="rtl")
+ * - Vazirmatn Persian font
+ * - TanStack Query + Toast providers
+ * - Persistent Header and Footer
+ *
+ * @see docs/FRONTEND.md for RTL setup details
+ */
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Providers } from './providers';

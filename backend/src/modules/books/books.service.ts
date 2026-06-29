@@ -1,3 +1,16 @@
+/**
+ * Books Service - Core business logic for book management
+ *
+ * Responsibilities:
+ * - List books with search, filtering, pagination, and Redis caching
+ * - Get book detail with reviews and categories
+ * - Create/update/delete books (seller only)
+ * - Cache invalidation on writes
+ *
+ * @see docs/BACKEND.md for service patterns
+ * @see docs/DATABASE.md for Book model schema
+ */
+
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { RedisService } from '../../common/redis/redis.service';
