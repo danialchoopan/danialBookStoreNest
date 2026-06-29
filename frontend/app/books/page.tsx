@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import BookGrid from '@/components/books/BookGrid';
+import Pagination from '@/components/ui/Pagination';
 
 export default function BooksPage() {
   const searchParams = useSearchParams();
@@ -11,6 +12,7 @@ export default function BooksPage() {
 
   const [search, setSearch] = useState(initialSearch);
   const [category, setCategory] = useState(initialCategory);
+  const [page, setPage] = useState(1);
 
   const categories = [
     { name: 'همه کتاب‌ها', slug: '', emoji: '📚' },
@@ -51,7 +53,7 @@ export default function BooksPage() {
                 <input
                   type="text"
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={(e) => { setSearch(e.target.value); setPage(1); }}
                   placeholder="نام کتاب یا نویسنده..."
                   className="w-full px-4 py-2.5 pr-10 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white outline-none transition-all"
                 />
@@ -68,7 +70,7 @@ export default function BooksPage() {
                 {categories.map((cat) => (
                   <button
                     key={cat.slug}
-                    onClick={() => setCategory(cat.slug)}
+                    onClick={() => { setCategory(cat.slug); setPage(1); }}
                     className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm transition-all ${
                       category === cat.slug
                         ? 'bg-primary-50 text-primary-700 font-bold border border-primary-200'
@@ -86,7 +88,8 @@ export default function BooksPage() {
 
         {/* Books Grid */}
         <div className="flex-1">
-          <BookGrid search={search} category={category} />
+          <BookGrid search={search} category={category} page={page} />
+          {/* Pagination handled inside BookGrid via page prop */}
         </div>
       </div>
     </div>
