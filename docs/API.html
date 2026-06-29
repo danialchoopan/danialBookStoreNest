@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Reference - BookNest Docs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 2rem; margin-bottom: 10px; }
+        h2 { font-size: 1.4rem; margin: 35px 0 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        h3 { font-size: 1.1rem; margin: 20px 0 8px; color: #334155; }
+        p { margin-bottom: 10px; color: #475569; }
+        a { color: #059669; text-decoration: none; }
+        pre { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; overflow-x: auto; margin: 12px 0; font-size: 0.85rem; line-height: 1.6; }
+        code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: #059669; font-family: 'SF Mono', Consolas, monospace; }
+        pre code { background: none; color: inherit; padding: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+        th { background: #f1f5f9; padding: 10px 14px; text-align: left; font-size: 0.85rem; }
+        td { padding: 8px 14px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; color: #475569; }
+        .nav { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 20px; margin-bottom: 30px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav a { font-weight: 500; font-size: 0.9rem; }
+        .method { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; font-family: monospace; min-width: 50px; text-align: center; }
+        .get { background: #dcfce7; color: #166534; }
+        .post { background: #dbeafe; color: #1e40af; }
+        .put { background: #fef3c7; color: #92400e; }
+        .patch { background: #f3e8ff; color: #6b21a8; }
+        .delete { background: #fee2e2; color: #991b1b; }
+        .lock { font-size: 0.75rem; color: #94a3b8; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="nav">
+        <a href="index.html">← Home</a>
+        <a href="ARCHITECTURE.html">Architecture</a>
+        <a href="BACKEND.html">Backend</a>
+        <a href="FRONTEND.html">Frontend</a>
+        <a href="DATABASE.html">Database</a>
+        <a href="DEVELOPMENT.html">Development</a>
+        <a href="DEPLOYMENT.html">Deployment</a>
+    </nav>
+
+    <h1>📡 API Reference</h1>
+    <p>Base URL: <code>http://localhost:4000/api</code></p>
+    <p>Swagger docs: <code>http://localhost:4000/api/docs</code></p>
+
+    <h2>Authentication</h2>
+    <p>All protected endpoints require <code>Authorization: Bearer &lt;token&gt;</code> header.</p>
+
+    <table>
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Auth</th></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/auth/register</code></td><td>Register new user</td><td>No</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/auth/login</code></td><td>Login</td><td>No</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/auth/profile</code></td><td>Get current user</td><td><span class="lock">🔒 Yes</span></td></tr>
+    </table>
+
+    <h2>Books</h2>
+    <table>
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Auth</th></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/books</code></td><td>List books (search/filter/paginate)</td><td>No</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/books/:id</code></td><td>Book detail with reviews</td><td>No</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/books</code></td><td>Create book</td><td><span class="lock">🔒 Seller</span></td></tr>
+        <tr><td><span class="method put">PUT</span></td><td><code>/books/:id</code></td><td>Update book</td><td><span class="lock">🔒 Seller (owner)</span></td></tr>
+        <tr><td><span class="method delete">DELETE</span></td><td><code>/books/:id</code></td><td>Delete book</td><td><span class="lock">🔒 Seller (owner)</span></td></tr>
+    </table>
+
+    <h2>Cart</h2>
+    <table>
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Auth</th></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/cart</code></td><td>Get cart</td><td><span class="lock">🔒 Yes</span></td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/cart/items</code></td><td>Add to cart</td><td><span class="lock">🔒 Yes</span></td></tr>
+        <tr><td><span class="method put">PUT</span></td><td><code>/cart/items/:itemId</code></td><td>Update quantity</td><td><span class="lock">🔒 Yes</span></td></tr>
+        <tr><td><span class="method delete">DELETE</span></td><td><code>/cart/items/:itemId</code></td><td>Remove item</td><td><span class="lock">🔒 Yes</span></td></tr>
+        <tr><td><span class="method delete">DELETE</span></td><td><code>/cart</code></td><td>Clear cart</td><td><span class="lock">🔒 Yes</span></td></tr>
+    </table>
+
+    <h2>Orders</h2>
+    <table>
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Auth</th></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/orders</code></td><td>Create order from cart</td><td><span class="lock">🔒 Yes</span></td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/orders</code></td><td>List my orders</td><td><span class="lock">🔒 Yes</span></td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/orders/:id</code></td><td>Order detail</td><td><span class="lock">🔒 Yes</span></td></tr>
+        <tr><td><span class="method delete">DELETE</span></td><td><code>/orders/:id</code></td><td>Cancel order (PENDING only)</td><td><span class="lock">🔒 Yes</span></td></tr>
+    </table>
+
+    <h2>Reviews</h2>
+    <table>
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Auth</th></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/reviews/book/:bookId</code></td><td>List reviews for book</td><td>No</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/reviews/book/:bookId</code></td><td>Add review (buyer only)</td><td><span class="lock">🔒 Yes</span></td></tr>
+        <tr><td><span class="method put">PUT</span></td><td><code>/reviews/:id</code></td><td>Update own review</td><td><span class="lock">🔒 Yes</span></td></tr>
+        <tr><td><span class="method delete">DELETE</span></td><td><code>/reviews/:id</code></td><td>Delete own review</td><td><span class="lock">🔒 Yes</span></td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/reviews/my</code></td><td>My reviews</td><td><span class="lock">🔒 Yes</span></td></tr>
+    </table>
+
+    <h2>Seller</h2>
+    <table>
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Auth</th></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/seller/dashboard</code></td><td>Dashboard stats</td><td><span class="lock">🔒 Seller</span></td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/seller/books</code></td><td>My books</td><td><span class="lock">🔒 Seller</span></td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/seller/orders</code></td><td>My orders</td><td><span class="lock">🔒 Seller</span></td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/seller/wallet</code></td><td>Wallet transactions</td><td><span class="lock">🔒 Seller</span></td></tr>
+        <tr><td><span class="method patch">PATCH</span></td><td><code>/seller/orders/:orderId/status</code></td><td>Update order status</td><td><span class="lock">🔒 Seller</span></td></tr>
+    </table>
+
+    <h2>Admin</h2>
+    <table>
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Auth</th></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/admin/dashboard</code></td><td>Dashboard stats</td><td><span class="lock">🔒 Admin</span></td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/admin/sellers</code></td><td>List vendors</td><td><span class="lock">🔒 Admin</span></td></tr>
+        <tr><td><span class="method patch">PATCH</span></td><td><code>/admin/sellers/:id/approve</code></td><td>Approve vendor</td><td><span class="lock">🔒 Admin</span></td></tr>
+        <tr><td><span class="method patch">PATCH</span></td><td><code>/admin/sellers/:id/reject</code></td><td>Reject vendor</td><td><span class="lock">🔒 Admin</span></td></tr>
+        <tr><td><span class="method patch">PATCH</span></td><td><code>/admin/sellers/:id/commission</code></td><td>Set commission rate</td><td><span class="lock">🔒 Admin</span></td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/admin/orders</code></td><td>All orders</td><td><span class="lock">🔒 Admin</span></td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/admin/reviews</code></td><td>All reviews</td><td><span class="lock">🔒 Admin</span></td></tr>
+    </table>
+
+    <h2>Users</h2>
+    <table>
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Auth</th></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/users</code></td><td>List all users</td><td><span class="lock">🔒 Admin</span></td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/users/:id</code></td><td>User detail</td><td><span class="lock">🔒 Admin</span></td></tr>
+        <tr><td><span class="method patch">PATCH</span></td><td><code>/users/:id/toggle-active</code></td><td>Toggle active status</td><td><span class="lock">🔒 Admin</span></td></tr>
+        <tr><td><span class="method patch">PATCH</span></td><td><code>/users/:id/role</code></td><td>Change user role</td><td><span class="lock">🔒 Admin</span></td></tr>
+    </table>
+
+    <h2>Payments</h2>
+    <table>
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Auth</th></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/payments/wallet/topup</code></td><td>Top up wallet</td><td><span class="lock">🔒 Seller</span></td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/payments/wallet/summary</code></td><td>Wallet summary</td><td><span class="lock">🔒 Seller</span></td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/payments/deduct-commission/:orderId</code></td><td>Deduct commission</td><td><span class="lock">🔒 Admin</span></td></tr>
+    </table>
+
+    <h2>HTTP Status Codes</h2>
+    <table>
+        <tr><th>Code</th><th>Meaning</th></tr>
+        <tr><td><code>200</code></td><td>Success</td></tr>
+        <tr><td><code>201</code></td><td>Created</td></tr>
+        <tr><td><code>400</code></td><td>Bad request / validation error</td></tr>
+        <tr><td><code>401</code></td><td>Unauthorized (no/invalid token)</td></tr>
+        <tr><td><code>403</code></td><td>Forbidden (wrong role)</td></tr>
+        <tr><td><code>404</code></td><td>Not found</td></tr>
+        <tr><td><code>500</code></td><td>Server error</td></tr>
+    </table>
+</div>
+</body>
+</html>

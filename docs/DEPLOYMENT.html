@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment - BookNest Docs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 2rem; margin-bottom: 10px; }
+        h2 { font-size: 1.4rem; margin: 35px 0 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        h3 { font-size: 1.1rem; margin: 20px 0 8px; color: #334155; }
+        p { margin-bottom: 10px; color: #475569; }
+        a { color: #059669; text-decoration: none; }
+        pre { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; overflow-x: auto; margin: 12px 0; font-size: 0.85rem; line-height: 1.6; }
+        code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: #059669; font-family: 'SF Mono', Consolas, monospace; }
+        pre code { background: none; color: inherit; padding: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+        th { background: #f1f5f9; padding: 10px 14px; text-align: left; font-size: 0.85rem; }
+        td { padding: 8px 14px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; color: #475569; }
+        .nav { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 20px; margin-bottom: 30px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav a { font-weight: 500; font-size: 0.9rem; }
+        .note { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 14px 18px; margin: 15px 0; font-size: 0.9rem; color: #92400e; }
+        ul { padding-right: 20px; color: #475569; }
+        li { margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="nav">
+        <a href="index.html">← Home</a>
+        <a href="ARCHITECTURE.html">Architecture</a>
+        <a href="BACKEND.html">Backend</a>
+        <a href="FRONTEND.html">Frontend</a>
+        <a href="DATABASE.html">Database</a>
+        <a href="API.html">API</a>
+        <a href="DEVELOPMENT.html">Development</a>
+    </nav>
+
+    <h1>🚀 Deployment</h1>
+
+    <h2>Docker (Development)</h2>
+    <pre><code>docker-compose up -d</code></pre>
+    <p>This starts:</p>
+    <ul>
+        <li>PostgreSQL on port 5432</li>
+        <li>Redis on port 6379</li>
+    </ul>
+
+    <h2>Backend Dockerfile</h2>
+    <pre><code># backend/Dockerfile
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:18-alpine AS runner
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/prisma ./prisma
+
+EXPOSE 4000
+CMD ["npm", "run", "start:prod"]</code></pre>
+
+    <h2>Frontend Dockerfile</h2>
+    <pre><code># frontend/Dockerfile
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:18-alpine AS runner
+WORKDIR /app
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/public ./public
+
+EXPOSE 3000
+CMD ["npm", "start"]</code></pre>
+
+    <h2>Production docker-compose.yml</h2>
+    <pre><code>version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: booknest
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: booknest_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+
+  backend:
+    build: ./backend
+    ports:
+      - '4000:4000'
+    environment:
+      DATABASE_URL: postgresql://booknest:${DB_PASSWORD}@postgres:5432/booknest_db
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      - postgres
+      - redis
+
+  frontend:
+    build: ./frontend
+    ports:
+      - '3000:3000'
+    environment:
+      NEXT_PUBLIC_API_URL: http://backend:4000/api
+
+volumes:
+  postgres_data:
+  redis_data:</code></pre>
+
+    <h2>Environment Variables</h2>
+    <table>
+        <tr><th>Variable</th><th>Description</th><th>Required</th></tr>
+        <tr><td><code>DATABASE_URL</code></td><td>PostgreSQL connection string</td><td>Yes</td></tr>
+        <tr><td><code>REDIS_URL</code></td><td>Redis connection string</td><td>Yes</td></tr>
+        <tr><td><code>JWT_SECRET</code></td><td>Strong random string (32+ chars)</td><td>Yes</td></tr>
+        <tr><td><code>JWT_EXPIRES_IN</code></td><td>Token expiry (e.g., 7d)</td><td>No</td></tr>
+        <tr><td><code>PORT</code></td><td>Server port</td><td>No (default: 4000)</td></tr>
+        <tr><td><code>DB_PASSWORD</code></td><td>PostgreSQL password</td><td>Yes</td></tr>
+    </table>
+
+    <h2>Production Checklist</h2>
+    <ul>
+        <li>Set strong <code>JWT_SECRET</code></li>
+        <li>Use HTTPS (nginx/caddy reverse proxy)</li>
+        <li>Enable Helmet in <code>main.ts</code></li>
+        <li>Set up rate limiting</li>
+        <li>Configure CORS for production domain</li>
+        <li>Set up database backups</li>
+        <li>Monitor Redis memory usage</li>
+        <li>Set up logging (Winston/Pino)</li>
+        <li>Configure Next.js <code>output: 'standalone'</code></li>
+    </ul>
+
+    <h2>Reverse Proxy (Nginx)</h2>
+    <pre><code>server {
+    listen 80;
+    server_name api.booknest.ir;
+
+    location / {
+        proxy_pass http://localhost:4000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+
+server {
+    listen 80;
+    server_name booknest.ir;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}</code></pre>
+
+    <h2>Scaling Notes</h2>
+    <table>
+        <tr><th>Component</th><th>Strategy</th></tr>
+        <tr><td>Database</td><td>Connection pooling (PgBouncer)</td></tr>
+        <tr><td>Cache</td><td>Redis Cluster for high availability</td></tr>
+        <tr><td>Frontend</td><td>CDN for static assets (Vercel/CloudFlare)</td></tr>
+        <tr><td>Backend</td><td>Multiple instances behind load balancer</td></tr>
+    </table>
+</div>
+</body>
+</html>

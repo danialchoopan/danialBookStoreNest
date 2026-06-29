@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend Guide - BookNest Docs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 2rem; margin-bottom: 10px; }
+        h2 { font-size: 1.4rem; margin: 35px 0 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        h3 { font-size: 1.1rem; margin: 20px 0 8px; color: #334155; }
+        p { margin-bottom: 10px; color: #475569; }
+        a { color: #059669; text-decoration: none; }
+        pre { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; overflow-x: auto; margin: 12px 0; font-size: 0.85rem; line-height: 1.6; }
+        code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: #059669; font-family: 'SF Mono', Consolas, monospace; }
+        pre code { background: none; color: inherit; padding: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+        th { background: #f1f5f9; padding: 10px 14px; text-align: left; font-size: 0.85rem; }
+        td { padding: 8px 14px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; color: #475569; }
+        .nav { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 20px; margin-bottom: 30px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav a { font-weight: 500; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="nav">
+        <a href="index.html">← Home</a>
+        <a href="ARCHITECTURE.html">Architecture</a>
+        <a href="BACKEND.html">Backend</a>
+        <a href="DATABASE.html">Database</a>
+        <a href="API.html">API</a>
+        <a href="DEVELOPMENT.html">Development</a>
+        <a href="DEPLOYMENT.html">Deployment</a>
+    </nav>
+
+    <h1>🖥️ Frontend Guide (Next.js)</h1>
+
+    <h2>Getting Started</h2>
+    <pre><code>cd frontend
+npm install
+npm run dev    # Start dev server (port 3000)</code></pre>
+
+    <h2>App Router Structure</h2>
+    <pre><code>app/
+├── layout.tsx              # Root layout (RTL + font + providers)
+├── providers.tsx           # TanStack Query + Toast providers
+├── page.tsx                # Homepage
+├── globals.css             # Tailwind + Vazirmatn font
+├── (auth)/
+│   ├── login/page.tsx      # Login
+│   └── register/page.tsx
+├── books/
+│   ├── page.tsx            # Book listing + search
+│   └── [id]/page.tsx       # Book detail (dynamic route)
+├── cart/page.tsx
+├── checkout/page.tsx       # Multi-step checkout
+├── orders/page.tsx
+├── seller/
+│   ├── page.tsx            # Vendor dashboard
+│   ├── products/page.tsx
+│   ├── orders/page.tsx
+│   └── wallet/page.tsx
+├── admin/
+│   ├── page.tsx            # Admin dashboard (charts)
+│   ├── users/page.tsx
+│   ├── sellers/page.tsx
+│   └── categories/page.tsx
+├── contact/page.tsx
+├── faq/page.tsx
+├── terms/page.tsx
+└── privacy/page.tsx</code></pre>
+
+    <h2>RTL Setup</h2>
+    <p>The entire UI is in Persian (Farsi) with RTL direction:</p>
+    <pre><code>// app/layout.tsx
+&lt;html lang="fa" dir="rtl"&gt;
+  &lt;body className="font-vazir min-h-screen flex flex-col"&gt;</code></pre>
+
+    <pre><code>/* globals.css */
+@import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
+
+html { direction: rtl; }
+body { font-family: 'Vazirmatn', Tahoma, Arial, sans-serif; }</code></pre>
+
+    <h2>State Management</h2>
+
+    <h3>Zustand Stores</h3>
+    <pre><code>// Auth Store
+const { user, isAuthenticated, login, logout, loadUser } = useAuthStore();
+
+// Cart Store
+const { items, totalAmount, itemCount, addItem, removeItem, fetchCart } = useCartStore();</code></pre>
+
+    <h3>TanStack Query</h3>
+    <pre><code>const { data, isLoading, error } = useQuery({
+  queryKey: ['books', search, category],
+  queryFn: async () => {
+    const { data } = await api.get('/books', { params: { search, category } });
+    return data;
+  },
+});
+
+// Mutations
+const mutation = useMutation({
+  mutationFn: (newData) => api.post('/endpoint', newData),
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['data'] });
+    toast.success('Success');
+  },
+});</code></pre>
+
+    <h2>Component Patterns</h2>
+
+    <h3>Reusable UI Components</h3>
+    <table>
+        <tr><th>Component</th><th>Location</th><th>Purpose</th></tr>
+        <tr><td><code>Button</code></td><td>components/ui/</td><td>Variants: primary, secondary, danger, ghost</td></tr>
+        <tr><td><code>Card</code></td><td>components/ui/</td><td>With optional hover effect</td></tr>
+        <tr><td><code>Badge</code></td><td>components/ui/</td><td>Status indicators</td></tr>
+        <tr><td><code>Pagination</code></td><td>components/ui/</td><td>Page navigation</td></tr>
+        <tr><td><code>ConfirmDialog</code></td><td>components/ui/</td><td>Modal confirmations</td></tr>
+        <tr><td><code>LoadingSkeleton</code></td><td>components/ui/</td><td>Loading states</td></tr>
+    </table>
+
+    <h3>Page Component Pattern</h3>
+    <pre><code>'use client';
+
+import { useQuery } from '@tanstack/react-query';
+import api from '@/lib/api';
+
+export default function SomePage() {
+  const { data, isLoading } = useQuery({
+    queryKey: ['some-data'],
+    queryFn: async () => {
+      const { data } = await api.get('/endpoint');
+      return data;
+    },
+  });
+
+  if (isLoading) return &lt;LoadingSkeleton /&gt;;
+
+  return &lt;div&gt;{/* Page content */}&lt;/div&gt;;
+}</code></pre>
+
+    <h2>API Client</h2>
+    <pre><code>import api from '@/lib/api';
+
+// GET
+const { data } = await api.get('/books');
+
+// POST
+const { data } = await api.post('/orders', { shippingAddress });
+
+// PATCH
+await api.patch(`/users/${id}/toggle-active`);
+
+// DELETE
+await api.delete(`/cart/items/${itemId}`);</code></pre>
+
+    <h2>Key Files Reference</h2>
+    <table>
+        <tr><th>File</th><th>Purpose</th></tr>
+        <tr><td><code>app/layout.tsx</code></td><td>Root layout, RTL, font, providers</td></tr>
+        <tr><td><code>app/providers.tsx</code></td><td>TanStack Query + Toast setup</td></tr>
+        <tr><td><code>lib/api.ts</code></td><td>Axios client with JWT interceptor</td></tr>
+        <tr><td><code>lib/store.ts</code></td><td>Auth Zustand store</td></tr>
+        <tr><td><code>lib/cart-store.ts</code></td><td>Cart Zustand store</td></tr>
+        <tr><td><code>lib/utils.ts</code></td><td>formatPrice, formatDate, etc.</td></tr>
+        <tr><td><code>types/index.ts</code></td><td>TypeScript interfaces</td></tr>
+        <tr><td><code>tailwind.config.ts</code></td><td>Theme, colors, font</td></tr>
+    </table>
+</div>
+</body>
+</html>

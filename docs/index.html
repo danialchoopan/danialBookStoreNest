@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNest Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; color: #0f172a; }
+        h2 { font-size: 1.5rem; margin: 40px 0 15px; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        h3 { font-size: 1.2rem; margin: 25px 0 10px; color: #334155; }
+        p { margin-bottom: 12px; color: #475569; }
+        a { color: #059669; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .hero { background: linear-gradient(135deg, #059669, #10b981); color: white; padding: 60px 40px; border-radius: 16px; margin-bottom: 40px; }
+        .hero h1 { color: white; font-size: 2.5rem; }
+        .hero p { color: rgba(255,255,255,0.9); font-size: 1.1rem; }
+        .toc { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 30px; margin-bottom: 40px; }
+        .toc h2 { margin-top: 0; border: none; }
+        .toc ul { list-style: none; padding: 0; }
+        .toc li { padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+        .toc li:last-child { border: none; }
+        .card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 30px; margin-bottom: 20px; }
+        .card h3 { margin-top: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+        th { background: #f1f5f9; padding: 12px 16px; text-align: left; font-weight: 600; color: #334155; font-size: 0.9rem; }
+        td { padding: 10px 16px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; color: #475569; }
+        tr:hover td { background: #f8fafc; }
+        code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: #059669; font-family: 'SF Mono', Consolas, monospace; }
+        pre { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; overflow-x: auto; margin: 15px 0; font-size: 0.85rem; line-height: 1.6; }
+        pre code { background: none; color: inherit; padding: 0; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .badge-green { background: #dcfce7; color: #166534; }
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-purple { background: #f3e8ff; color: #6b21a8; }
+        .badge-amber { background: #fef3c7; color: #92400e; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 15px 0; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 15px 0; }
+        .stat-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; text-align: center; }
+        .stat-card .icon { font-size: 2rem; margin-bottom: 8px; }
+        .stat-card .value { font-size: 1.5rem; font-weight: 700; color: #0f172a; }
+        .stat-card .label { font-size: 0.85rem; color: #64748b; }
+        .nav { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 20px; margin-bottom: 30px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav a { font-weight: 500; font-size: 0.9rem; }
+        @media (max-width: 640px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } .hero { padding: 30px 20px; } .hero h1 { font-size: 1.8rem; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <h1>📚 BookNest Documentation</h1>
+        <p>Complete developer documentation for the multi-vendor bookstore platform.</p>
+    </div>
+
+    <nav class="nav">
+        <a href="ARCHITECTURE.html">Architecture</a>
+        <a href="BACKEND.html">Backend</a>
+        <a href="FRONTEND.html">Frontend</a>
+        <a href="DATABASE.html">Database</a>
+        <a href="API.html">API Reference</a>
+        <a href="DEVELOPMENT.html">Development</a>
+        <a href="DEPLOYMENT.html">Deployment</a>
+    </nav>
+
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><strong><a href="ARCHITECTURE.html">Architecture</a></strong> — System design, data flow, security layers</li>
+            <li><strong><a href="BACKEND.html">Backend Guide</a></strong> — NestJS modules, patterns, caching, transactions</li>
+            <li><strong><a href="FRONTEND.html">Frontend Guide</a></strong> — Next.js pages, components, RTL, state management</li>
+            <li><strong><a href="DATABASE.html">Database Schema</a></strong> — Prisma models, relationships, queries</li>
+            <li><strong><a href="API.html">API Reference</a></strong> — All endpoints documented</li>
+            <li><strong><a href="DEVELOPMENT.html">Development Guide</a></strong> — Setup, conventions, adding features</li>
+            <li><strong><a href="DEPLOYMENT.html">Deployment</a></strong> — Docker, production, scaling</li>
+        </ul>
+    </div>
+
+    <div class="grid-3">
+        <div class="stat-card"><div class="icon">⚡</div><div class="value">Next.js 14</div><div class="label">Frontend (App Router)</div></div>
+        <div class="stat-card"><div class="icon">🔧</div><div class="value">NestJS</div><div class="label">Backend API</div></div>
+        <div class="stat-card"><div class="icon">🗄️</div><div class="value">PostgreSQL</div><div class="label">Database</div></div>
+    </div>
+
+    <h2>Quick Start for New Developers</h2>
+    <pre><code># 1. Clone the repo
+git clone https://github.com/danialchoopan/danialBookStoreNest.git
+cd booknestjsshop
+
+# 2. Start infrastructure (PostgreSQL + Redis)
+docker-compose up -d
+
+# 3. Setup backend
+cd backend
+cp ../.env.example .env
+npm install
+npx prisma migrate dev
+npm run prisma:seed
+npm run start:dev
+
+# 4. Setup frontend (new terminal)
+cd frontend
+npm install
+npm run dev</code></pre>
+
+    <h2>Tech Stack</h2>
+    <table>
+        <tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr>
+        <tr><td>Frontend</td><td>Next.js 14 (App Router)</td><td>SSR/CSR React framework</td></tr>
+        <tr><td>UI</td><td>Tailwind CSS</td><td>Utility-first CSS (RTL)</td></tr>
+        <tr><td>State</td><td>Zustand</td><td>Lightweight state management</td></tr>
+        <tr><td>Data Fetching</td><td>TanStack Query</td><td>Server state management</td></tr>
+        <tr><td>Backend</td><td>NestJS</td><td>TypeScript Node.js framework</td></tr>
+        <tr><td>Database</td><td>PostgreSQL</td><td>Primary database</td></tr>
+        <tr><td>ORM</td><td>Prisma</td><td>Type-safe database access</td></tr>
+        <tr><td>Cache</td><td>Redis</td><td>Response caching</td></tr>
+        <tr><td>Auth</td><td>JWT</td><td>Stateless authentication</td></tr>
+    </table>
+
+    <h2>Test Accounts</h2>
+    <table>
+        <tr><th>Role</th><th>Email</th><th>Password</th></tr>
+        <tr><td><span class="badge badge-amber">Admin</span></td><td>admin@booknest.ir</td><td>admin123</td></tr>
+        <tr><td><span class="badge badge-purple">Vendor</span></td><td>seller1@booknest.ir</td><td>seller123</td></tr>
+        <tr><td><span class="badge badge-blue">Customer</span></td><td>customer1@booknest.ir</td><td>customer123</td></tr>
+    </table>
+
+    <h2>Project Structure</h2>
+    <pre><code>booknestjsshop/
+├── backend/                    # NestJS API server
+│   ├── prisma/
+│   │   ├── schema.prisma       # Database schema
+│   │   └── seed.ts             # Test data seeder
+│   └── src/
+│       ├── main.ts             # App entry point
+│       ├── app.module.ts       # Root module
+│       ├── common/             # Guards, Decorators, Filters, Redis
+│       └── modules/            # Auth, Books, Cart, Orders, Seller, Admin, Reviews, Payments
+├── frontend/                   # Next.js application (RTL)
+│   ├── app/                    # Pages (Persian UI)
+│   ├── components/             # UI Components
+│   ├── lib/                    # API Client, Stores, Utils
+│   └── types/                  # TypeScript Types
+├── docs/                       # This documentation
+└── docker-compose.yml</code></pre>
+</div>
+</body>
+</html>

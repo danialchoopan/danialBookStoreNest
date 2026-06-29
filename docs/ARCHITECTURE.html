@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture - BookNest Docs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 2rem; margin-bottom: 10px; }
+        h2 { font-size: 1.4rem; margin: 35px 0 12px; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        h3 { font-size: 1.1rem; margin: 20px 0 8px; color: #334155; }
+        p { margin-bottom: 10px; color: #475569; }
+        a { color: #059669; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        pre { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; overflow-x: auto; margin: 12px 0; font-size: 0.85rem; line-height: 1.6; }
+        code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: #059669; font-family: 'SF Mono', Consolas, monospace; }
+        pre code { background: none; color: inherit; padding: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+        th { background: #f1f5f9; padding: 10px 14px; text-align: left; font-size: 0.85rem; }
+        td { padding: 8px 14px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; color: #475569; }
+        .nav { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 20px; margin-bottom: 30px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav a { font-weight: 500; font-size: 0.9rem; }
+        .diagram { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 30px; text-align: center; margin: 20px 0; font-family: monospace; font-size: 0.85rem; line-height: 1.8; white-space: pre; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+        .bg-green { background: #dcfce7; color: #166534; }
+        .bg-blue { background: #dbeafe; color: #1e40af; }
+        .bg-purple { background: #f3e8ff; color: #6b21a8; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="nav">
+        <a href="index.html">← Home</a>
+        <a href="BACKEND.html">Backend</a>
+        <a href="FRONTEND.html">Frontend</a>
+        <a href="DATABASE.html">Database</a>
+        <a href="API.html">API</a>
+        <a href="DEVELOPMENT.html">Development</a>
+        <a href="DEPLOYMENT.html">Deployment</a>
+    </nav>
+
+    <h1>🏗️ Architecture</h1>
+    <p>System design, data flow, and security layers for BookNest.</p>
+
+    <h2>System Overview</h2>
+    <div class="diagram">┌─────────────────────────────────────────────────┐
+│                    CLIENT                        │
+│         Next.js (App Router + RTL)              │
+│         Port: 3000                              │
+└──────────────────────┬──────────────────────────┘
+                       │ HTTP/REST API
+                       ▼
+┌─────────────────────────────────────────────────┐
+│                  BACKEND API                     │
+│              NestJS + Prisma                    │
+│              Port: 4000                         │
+└──────┬──────────────────────┬───────────────────┘
+       │                      │
+       ▼                      ▼
+┌──────────────┐    ┌──────────────────┐
+│  PostgreSQL  │    │      Redis       │
+│  Port: 5432  │    │  Port: 6379      │
+└──────────────┘    └──────────────────┘</div>
+
+    <h2>Data Flows</h2>
+
+    <h3>Authentication Flow</h3>
+    <ol style="padding-right: 20px; color: #475569;">
+        <li>User submits email/password → <code>POST /api/auth/login</code></li>
+        <li>Backend validates credentials via Prisma</li>
+        <li>Backend generates JWT (access + refresh tokens)</li>
+        <li>Frontend stores tokens in localStorage</li>
+        <li>Axios interceptor attaches Bearer token to all requests</li>
+        <li>JwtGuard validates token on protected routes</li>
+        <li>RolesGuard checks user role for authorized endpoints</li>
+    </ol>
+
+    <h3>Order Flow</h3>
+    <ol style="padding-right: 20px; color: #475569;">
+        <li>User adds books to cart → <code>POST /api/cart/items</code></li>
+        <li>Cart items stored in database (Cart → CartItem → Book)</li>
+        <li>User proceeds to checkout → fills address</li>
+        <li>User submits order → <code>POST /api/orders</code></li>
+        <li>Backend creates Order + OrderItems in a <strong>transaction</strong></li>
+        <li>Stock is decremented for each book</li>
+        <li>Cart is cleared</li>
+        <li>Seller can update order status via <code>PATCH /seller/orders/:id/status</code></li>
+    </ol>
+
+    <h3>Caching Flow</h3>
+    <ol style="padding-right: 20px; color: #475569;">
+        <li><code>GET /api/books</code> → BooksService.findAll()</li>
+        <li>Check Redis for key: <code>books:{search}:{category}:{page}</code></li>
+        <li>If cache HIT → return cached response</li>
+        <li>If cache MISS → query PostgreSQL, cache result (TTL: 300s)</li>
+        <li>When book is created/updated/deleted → invalidate pattern <code>books:*</code></li>
+    </ol>
+
+    <h2>Module Responsibilities</h2>
+    <table>
+        <tr><th>Module</th><th>Responsibility</th><th>Key Files</th></tr>
+        <tr><td><code>auth</code></td><td>Register, login, JWT, profile</td><td>auth.service.ts, jwt.strategy.ts</td></tr>
+        <tr><td><code>books</code></td><td>CRUD, search, filtering + Redis caching</td><td>books.service.ts</td></tr>
+        <tr><td><code>cart</code></td><td>Add/remove/update items</td><td>cart.service.ts</td></tr>
+        <tr><td><code>orders</code></td><td>Create from cart, history, cancel</td><td>orders.service.ts</td></tr>
+        <tr><td><code>seller</code></td><td>Dashboard, products, orders, wallet</td><td>seller.service.ts</td></tr>
+        <tr><td><code>admin</code></td><td>Users, vendors, categories</td><td>admin.service.ts</td></tr>
+        <tr><td><code>reviews</code></td><td>CRUD with buyer-only restriction</td><td>reviews.service.ts</td></tr>
+        <tr><td><code>payments</code></td><td>Wallet top-up, commission deduction</td><td>payments.service.ts</td></tr>
+    </table>
+
+    <h2>Security Layers</h2>
+    <table>
+        <tr><th>Layer</th><th>Purpose</th></tr>
+        <tr><td><span class="badge bg-green">Global ValidationPipe</span></td><td>Whitelists and transforms DTOs</td></tr>
+        <tr><td><span class="badge bg-blue">JwtAuthGuard</span></td><td>Validates JWT on protected routes</td></tr>
+        <tr><td><span class="badge bg-purple">RolesGuard</span></td><td>Checks <code>@Roles()</code> decorator against <code>user.role</code></td></tr>
+        <tr><td><span class="badge bg-green">AllExceptionsFilter</span></td><td>Catches all exceptions, returns Persian messages</td></tr>
+        <tr><td><span class="badge bg-blue">TransformInterceptor</span></td><td>Wraps responses in <code>{ data, success, timestamp }</code></td></tr>
+        <tr><td><span class="badge bg-purple">CORS</span></td><td>Allows localhost:3000 and localhost:3001</td></tr>
+    </table>
+
+    <h2>Roles &amp; Permissions</h2>
+    <table>
+        <tr><th>Role</th><th>Access</th></tr>
+        <tr><td><span class="badge bg-blue">CUSTOMER</span></td><td>Browse, search, cart, checkout, orders, reviews</td></tr>
+        <tr><td><span class="badge bg-purple">SELLER</span></td><td>All customer + product management, wallet, order fulfillment</td></tr>
+        <tr><td><span class="badge" style="background:#fef3c7;color:#92400e;">ADMIN</span></td><td>All features + user management, vendor approval, commission, categories</td></tr>
+    </table>
+</div>
+</body>
+</html>

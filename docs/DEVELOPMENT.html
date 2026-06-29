@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Development Guide - BookNest Docs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 2rem; margin-bottom: 10px; }
+        h2 { font-size: 1.4rem; margin: 35px 0 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        h3 { font-size: 1.1rem; margin: 20px 0 8px; color: #334155; }
+        p { margin-bottom: 10px; color: #475569; }
+        a { color: #059669; text-decoration: none; }
+        pre { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; overflow-x: auto; margin: 12px 0; font-size: 0.85rem; line-height: 1.6; }
+        code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: #059669; font-family: 'SF Mono', Consolas, monospace; }
+        pre code { background: none; color: inherit; padding: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+        th { background: #f1f5f9; padding: 10px 14px; text-align: left; font-size: 0.85rem; }
+        td { padding: 8px 14px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; color: #475569; }
+        .nav { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 20px; margin-bottom: 30px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav a { font-weight: 500; font-size: 0.9rem; }
+        .note { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 14px 18px; margin: 15px 0; font-size: 0.9rem; color: #92400e; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="nav">
+        <a href="index.html">← Home</a>
+        <a href="ARCHITECTURE.html">Architecture</a>
+        <a href="BACKEND.html">Backend</a>
+        <a href="FRONTEND.html">Frontend</a>
+        <a href="DATABASE.html">Database</a>
+        <a href="API.html">API</a>
+        <a href="DEPLOYMENT.html">Deployment</a>
+    </nav>
+
+    <h1>🛠️ Development Guide</h1>
+
+    <h2>Environment Setup</h2>
+    <h3>Prerequisites</h3>
+    <ul style="padding-right: 20px; color: #475569;">
+        <li>Node.js 18+</li>
+        <li>Docker &amp; Docker Compose</li>
+        <li>Git</li>
+    </ul>
+
+    <h3>Install Dependencies</h3>
+    <pre><code># Backend
+cd backend && npm install
+
+# Frontend
+cd frontend && npm install</code></pre>
+
+    <h2>Coding Conventions</h2>
+
+    <h3>TypeScript</h3>
+    <ul style="padding-right: 20px; color: #475569;">
+        <li>Use strict TypeScript (<code>strict: true</code>)</li>
+        <li>Define interfaces in <code>types/</code> (frontend) or inline (backend)</li>
+        <li>Prefer <code>interface</code> over <code>type</code> for object shapes</li>
+    </ul>
+
+    <h3>Naming Conventions</h3>
+    <table>
+        <tr><th>Item</th><th>Convention</th><th>Example</th></tr>
+        <tr><td>Files</td><td>kebab-case</td><td><code>auth.service.ts</code></td></tr>
+        <tr><td>Components</td><td>PascalCase</td><td><code>BookCard.tsx</code></td></tr>
+        <tr><td>Variables</td><td>camelCase</td><td><code>bookList</code></td></tr>
+        <tr><td>Constants</td><td>UPPER_SNAKE</td><td><code>API_BASE_URL</code></td></tr>
+        <tr><td>DB tables</td><td>snake_case</td><td><code>order_items</code></td></tr>
+        <tr><td>DB models</td><td>PascalCase</td><td><code>OrderItem</code></td></tr>
+    </table>
+
+    <h2>Adding a New Feature</h2>
+
+    <h3>Backend (New Endpoint)</h3>
+    <ol style="padding-right: 20px; color: #475569;">
+        <li><strong>Create DTO</strong> in <code>modules/feature/dto/</code></li>
+        <li><strong>Add to Service</strong> in <code>modules/feature/feature.service.ts</code></li>
+        <li><strong>Add to Controller</strong> in <code>modules/feature/feature.controller.ts</code></li>
+        <li><strong>Register Module</strong> in <code>app.module.ts</code></li>
+        <li><strong>Update Schema</strong> if needed: <code>npx prisma migrate dev --name add_feature</code></li>
+    </ol>
+
+    <h3>Frontend (New Page)</h3>
+    <ol style="padding-right: 20px; color: #475569;">
+        <li>Create page in <code>app/feature/page.tsx</code></li>
+        <li>Use <code>'use client'</code> directive (if using hooks)</li>
+        <li>Use TanStack Query for data fetching</li>
+        <li>Add navigation link in <code>Header.tsx</code> if needed</li>
+    </ol>
+
+    <h2>Testing</h2>
+    <pre><code># Backend unit tests
+cd backend && npm run test
+
+# Backend e2e tests
+cd backend && npm run test:e2e
+
+# Frontend lint
+cd frontend && npm run lint</code></pre>
+
+    <h2>Git Workflow</h2>
+    <h3>Commit Messages</h3>
+    <pre><code>feat(scope): description
+fix(scope): description
+docs(scope): description
+refactor(scope): description</code></pre>
+
+    <p>Examples:</p>
+    <pre><code>feat(books): add advanced filtering
+fix(auth): handle expired JWT
+docs(api): update endpoint documentation</code></pre>
+
+    <h3>Branches</h3>
+    <table>
+        <tr><th>Branch</th><th>Purpose</th></tr>
+        <tr><td><code>main</code></td><td>Production-ready code</td></tr>
+        <tr><td><code>develop</code></td><td>Development branch</td></tr>
+        <tr><td><code>feature/*</code></td><td>New features</td></tr>
+        <tr><td><code>fix/*</code></td><td>Bug fixes</td></tr>
+    </table>
+
+    <h2>Common Tasks</h2>
+    <pre><code># Reset database
+cd backend
+npx prisma migrate reset
+npm run prisma:seed
+
+# View database
+npx prisma studio
+
+# Clear Redis cache
+redis-cli FLUSHDB</code></pre>
+</div>
+</body>
+</html>

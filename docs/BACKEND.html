@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Guide - BookNest Docs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 2rem; margin-bottom: 10px; }
+        h2 { font-size: 1.4rem; margin: 35px 0 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        h3 { font-size: 1.1rem; margin: 20px 0 8px; color: #334155; }
+        p { margin-bottom: 10px; color: #475569; }
+        a { color: #059669; text-decoration: none; }
+        pre { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; overflow-x: auto; margin: 12px 0; font-size: 0.85rem; line-height: 1.6; }
+        code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: #059669; font-family: 'SF Mono', Consolas, monospace; }
+        pre code { background: none; color: inherit; padding: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+        th { background: #f1f5f9; padding: 10px 14px; text-align: left; font-size: 0.85rem; }
+        td { padding: 8px 14px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; color: #475569; }
+        .nav { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 20px; margin-bottom: 30px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav a { font-weight: 500; font-size: 0.9rem; }
+        .note { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 14px 18px; margin: 15px 0; font-size: 0.9rem; color: #92400e; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="nav">
+        <a href="index.html">← Home</a>
+        <a href="ARCHITECTURE.html">Architecture</a>
+        <a href="FRONTEND.html">Frontend</a>
+        <a href="DATABASE.html">Database</a>
+        <a href="API.html">API</a>
+        <a href="DEVELOPMENT.html">Development</a>
+        <a href="DEPLOYMENT.html">Deployment</a>
+    </nav>
+
+    <h1>🔧 Backend Guide (NestJS)</h1>
+
+    <h2>Getting Started</h2>
+    <pre><code>cd backend
+npm install
+npx prisma migrate dev    # Run migrations
+npm run prisma:seed       # Seed database
+npm run start:dev         # Start dev server (port 4000)</code></pre>
+
+    <h2>Module Structure</h2>
+    <p>Every module follows this pattern:</p>
+    <pre><code>modules/
+└── feature/
+    ├── dto/                # Data Transfer Objects (validation)
+    │   ├── create-xxx.dto.ts
+    │   └── query-xxx.dto.ts
+    ├── feature.service.ts  # Business logic
+    ├── feature.controller.ts # API routes
+    └── feature.module.ts   # NestJS module definition</code></pre>
+
+    <h3>Adding a New Module</h3>
+    <ol style="padding-right: 20px; color: #475569;">
+        <li>Create folder: <code>src/modules/newmodule/</code></li>
+        <li>Create files: <code>dto/</code>, <code>service.ts</code>, <code>controller.ts</code>, <code>module.ts</code></li>
+        <li>Register in <code>app.module.ts</code> imports</li>
+        <li>Add Prisma models if needed</li>
+    </ol>
+
+    <h2>Common Patterns</h2>
+
+    <h3>Guards &amp; Decorators</h3>
+    <pre><code>// Protected route (requires JWT)
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
+@Get('profile')
+getProfile(@CurrentUser('id') userId: string) { ... }
+
+// Role-restricted route
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles('ADMIN')
+@Get('admin-only')
+adminOnly() { ... }</code></pre>
+
+    <h3>DTO Validation</h3>
+    <pre><code>export class CreateBookDto {
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @IsNumber()
+  @Min(0)
+  price: number;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  categoryIds?: string[];
+}</code></pre>
+
+    <h3>Prisma Transactions</h3>
+    <pre><code>await this.prisma.$transaction(async (tx) => {
+  const order = await tx.order.create({ data: orderData });
+  await tx.book.update({ where: { id }, data: { stock: { decrement: qty } } });
+  await tx.cartItem.deleteMany({ where: { cartId } });
+  return order;
+});</code></pre>
+
+    <h3>Redis Caching</h3>
+    <pre><code>// Cache-aside pattern
+async findAll(query: QueryBooksDto) {
+  const cacheKey = `books:${query.search}:${query.category}:${query.page}`;
+  const cached = await this.redis.get(cacheKey);
+  if (cached) return cached;
+
+  const result = await this.prisma.book.findMany({ ... });
+  await this.redis.set(cacheKey, result, 300); // 5 min TTL
+  return result;
+}
+
+// Invalidate on write
+async create(dto: CreateBookDto) {
+  const book = await this.prisma.book.create({ data: dto });
+  await this.redis.delPattern('books:*');
+  return book;
+}</code></pre>
+
+    <h2>Key Files Reference</h2>
+    <table>
+        <tr><th>File</th><th>Purpose</th></tr>
+        <tr><td><code>src/main.ts</code></td><td>Bootstrap, global pipes, CORS, Swagger</td></tr>
+        <tr><td><code>src/app.module.ts</code></td><td>Root module, all imports</td></tr>
+        <tr><td><code>src/prisma/prisma.service.ts</code></td><td>Prisma client lifecycle</td></tr>
+        <tr><td><code>src/common/guards/jwt-auth.guard.ts</code></td><td>JWT validation</td></tr>
+        <tr><td><code>src/common/guards/roles.guard.ts</code></td><td>Role checking</td></tr>
+        <tr><td><code>src/common/decorators/current-user.decorator.ts</code></td><td>Extract user from request</td></tr>
+        <tr><td><code>src/common/decorators/roles.decorator.ts</code></td><td>Set required roles</td></tr>
+        <tr><td><code>src/common/filters/all-exceptions.filter.ts</code></td><td>Persian error messages</td></tr>
+        <tr><td><code>src/common/interceptors/transform.interceptor.ts</code></td><td>Response wrapping</td></tr>
+        <tr><td><code>src/common/redis/redis.service.ts</code></td><td>Redis client wrapper</td></tr>
+    </table>
+
+    <h2>Database Operations</h2>
+    <pre><code># Run migrations
+npx prisma migrate dev              # Create new migration
+npx prisma migrate dev --name NAME  # Named migration
+npx prisma db push                  # Push without migration
+
+# Reset database
+npx prisma migrate reset            # Reset + reseed
+npm run prisma:seed                 # Seed only
+
+# Prisma Studio (visual browser)
+npx prisma studio</code></pre>
+
+    <h2>API Response Format</h2>
+    <p>All responses are wrapped by <code>TransformInterceptor</code>:</p>
+    <pre><code>{
+  "data": { ... },
+  "success": true,
+  "timestamp": "2025-01-15T10:30:00.000Z"
+}</code></pre>
+
+    <p>Paginated responses include meta:</p>
+    <pre><code>{
+  "data": [...],
+  "meta": { "total": 100, "page": 1, "limit": 20, "totalPages": 5 }
+}</code></pre>
+</div>
+</body>
+</html>

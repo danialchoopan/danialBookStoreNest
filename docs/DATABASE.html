@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Schema - BookNest Docs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 2rem; margin-bottom: 10px; }
+        h2 { font-size: 1.4rem; margin: 35px 0 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        h3 { font-size: 1.1rem; margin: 20px 0 8px; color: #334155; }
+        p { margin-bottom: 10px; color: #475569; }
+        a { color: #059669; text-decoration: none; }
+        pre { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; overflow-x: auto; margin: 12px 0; font-size: 0.85rem; line-height: 1.6; }
+        code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: #059669; font-family: 'SF Mono', Consolas, monospace; }
+        pre code { background: none; color: inherit; padding: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+        th { background: #f1f5f9; padding: 10px 14px; text-align: left; font-size: 0.85rem; }
+        td { padding: 8px 14px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; color: #475569; }
+        .nav { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 20px; margin-bottom: 30px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav a { font-weight: 500; font-size: 0.9rem; }
+        .diagram { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin: 20px 0; font-family: monospace; font-size: 0.8rem; line-height: 1.8; white-space: pre; overflow-x: auto; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="nav">
+        <a href="index.html">← Home</a>
+        <a href="ARCHITECTURE.html">Architecture</a>
+        <a href="BACKEND.html">Backend</a>
+        <a href="FRONTEND.html">Frontend</a>
+        <a href="API.html">API</a>
+        <a href="DEVELOPMENT.html">Development</a>
+        <a href="DEPLOYMENT.html">Deployment</a>
+    </nav>
+
+    <h1>🗄️ Database Schema</h1>
+
+    <h2>Entity Relationships</h2>
+    <div class="diagram">User ──────────── SellerProfile ──── Book ──── BookCategory ──── Category
+  │                    │                │
+  ├── Cart ──── CartItem               ├── OrderItem ──── Order
+  │                                        │
+  ├── Order ──── OrderItem                 ├── Review
+  │
+  └── Review
+
+SellerProfile ──── WalletTransaction</div>
+
+    <h2>Models</h2>
+
+    <h3>User</h3>
+    <p>Core authentication model.</p>
+    <table>
+        <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        <tr><td><code>id</code></td><td>String (cuid)</td><td>Primary key</td></tr>
+        <tr><td><code>email</code></td><td>String (unique)</td><td>Login identifier</td></tr>
+        <tr><td><code>password</code></td><td>String</td><td>bcrypt hashed</td></tr>
+        <tr><td><code>firstName</code></td><td>String</td><td>Display name</td></tr>
+        <tr><td><code>lastName</code></td><td>String</td><td>Display name</td></tr>
+        <tr><td><code>phone</code></td><td>String? (unique)</td><td>Optional phone</td></tr>
+        <tr><td><code>role</code></td><td>Role enum</td><td>CUSTOMER, SELLER, ADMIN</td></tr>
+        <tr><td><code>isActive</code></td><td>Boolean</td><td>Can login?</td></tr>
+    </table>
+
+    <h3>SellerProfile</h3>
+    <p>Vendor profile linked to a User.</p>
+    <table>
+        <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        <tr><td><code>id</code></td><td>String (cuid)</td><td>Primary key</td></tr>
+        <tr><td><code>userId</code></td><td>String (unique)</td><td>Links to User</td></tr>
+        <tr><td><code>shopName</code></td><td>String</td><td>Display name</td></tr>
+        <tr><td><code>shopSlug</code></td><td>String (unique)</td><td>URL slug</td></tr>
+        <tr><td><code>balance</code></td><td>Decimal(12,2)</td><td>Wallet balance</td></tr>
+        <tr><td><code>commissionRate</code></td><td>Decimal(5,2)</td><td>Default 10%</td></tr>
+        <tr><td><code>isApproved</code></td><td>Boolean</td><td>Admin approved?</td></tr>
+    </table>
+
+    <h3>Book</h3>
+    <p>The core product model.</p>
+    <table>
+        <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        <tr><td><code>id</code></td><td>String (cuid)</td><td>Primary key</td></tr>
+        <tr><td><code>sellerId</code></td><td>String</td><td>Owner seller</td></tr>
+        <tr><td><code>title</code></td><td>String</td><td>Book title</td></tr>
+        <tr><td><code>slug</code></td><td>String (unique)</td><td>URL slug</td></tr>
+        <tr><td><code>isbn</code></td><td>String? (unique)</td><td>ISBN number</td></tr>
+        <tr><td><code>author</code></td><td>String</td><td>Author name</td></tr>
+        <tr><td><code>price</code></td><td>Decimal(10,2)</td><td>Sale price</td></tr>
+        <tr><td><code>comparePrice</code></td><td>Decimal?</td><td>Original price (for discount)</td></tr>
+        <tr><td><code>stock</code></td><td>Int</td><td>Available quantity</td></tr>
+        <tr><td><code>isPublished</code></td><td>Boolean</td><td>Visible to customers?</td></tr>
+    </table>
+
+    <h3>OrderStatus Enum</h3>
+    <pre><code>PENDING → PAID → PROCESSING → SHIPPED → DELIVERED
+                                      → CANCELLED
+                                      → REFUNDED</code></pre>
+
+    <h3>WalletTransaction</h3>
+    <table>
+        <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        <tr><td><code>amount</code></td><td>Decimal(12,2)</td><td>Transaction amount</td></tr>
+        <tr><td><code>type</code></td><td>WalletTxnType</td><td>CREDIT or DEBIT</td></tr>
+        <tr><td><code>description</code></td><td>String?</td><td>What it's for</td></tr>
+    </table>
+
+    <h2>Common Queries</h2>
+
+    <h3>Find books with filters</h3>
+    <pre><code>const where: Prisma.BookWhereInput = {
+  isPublished: true,
+  ...(search && {
+    OR: [
+      { title: { contains: search, mode: 'insensitive' } },
+      { author: { contains: search, mode: 'insensitive' } },
+    ],
+  }),
+  ...(category && {
+    categories: { some: { category: { slug: category } } },
+  }),
+};</code></pre>
+
+    <h2>Migrations</h2>
+    <pre><code># Create migration
+npx prisma migrate dev --name add_reviews_table
+
+# Apply pending migrations
+npx prisma migrate deploy
+
+# Reset database
+npx prisma migrate reset
+
+# Generate Prisma Client
+npx prisma generate</code></pre>
+</div>
+</body>
+</html>
