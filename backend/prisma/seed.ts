@@ -265,7 +265,76 @@ async function main() {
   await prisma.book.update({ where: { id: allBooks[4].id }, data: { stock: { decrement: 1 } } });
   await prisma.book.update({ where: { id: allBooks[8].id }, data: { stock: { decrement: 2 } } });
 
-  console.log(`✅ Created 3 sample orders`);
+  // More orders for richer dashboard data
+  const moreOrders = [
+    { userId: customers[1].id, status: 'PAID', books: [{ idx: 2, sellerIdx: 0, qty: 1 }] },
+    { userId: customers[0].id, status: 'PROCESSING', books: [{ idx: 6, sellerIdx: 1, qty: 1 }, { idx: 7, sellerIdx: 1, qty: 1 }] },
+    { userId: customers[1].id, status: 'DELIVERED', books: [{ idx: 10, sellerIdx: 2, qty: 2 }] },
+    { userId: customers[0].id, status: 'CANCELLED', books: [{ idx: 12, sellerIdx: 0, qty: 1 }] },
+    { userId: customers[1].id, status: 'DELIVERED', books: [{ idx: 14, sellerIdx: 2, qty: 1 }] },
+    { userId: customers[0].id, status: 'SHIPPED', books: [{ idx: 16, sellerIdx: 2, qty: 1 }, { idx: 17, sellerIdx: 1, qty: 1 }] },
+    { userId: customers[1].id, status: 'PENDING', books: [{ idx: 18, sellerIdx: 0, qty: 1 }] },
+    { userId: customers[0].id, status: 'PAID', books: [{ idx: 19, sellerIdx: 1, qty: 1 }] },
+    { userId: customers[1].id, status: 'DELIVERED', books: [{ idx: 3, sellerIdx: 0, qty: 1 }] },
+    { userId: customers[0].id, status: 'DELIVERED', books: [{ idx: 5, sellerIdx: 1, qty: 1 }] },
+    { userId: customers[1].id, status: 'PROCESSING', books: [{ idx: 9, sellerIdx: 2, qty: 1 }, { idx: 11, sellerIdx: 1, qty: 1 }] },
+    { userId: customers[0].id, status: 'SHIPPED', books: [{ idx: 1, sellerIdx: 0, qty: 1 }] },
+  ];
+
+  for (const orderData of moreOrders) {
+    let totalAmount = 0;
+    const items = orderData.books.map((b) => {
+      const price = Number(allBooks[b.idx].price);
+      totalAmount += price * b.qty;
+      return { bookId: allBooks[b.idx].id, sellerId: sellerProfiles[b.sellerIdx].id, quantity: b.qty, unitPrice: allBooks[b.idx].price, totalPrice: price * b.qty };
+    });
+
+    await prisma.order.create({
+      data: {
+        userId: orderData.userId,
+        status: orderData.status as any,
+        totalAmount,
+        shippingAddress: { street: 'خیابان نمونه', city: 'تهران', province: 'تهران', postalCode: '1234567890' },
+        items: { create: items },
+      },
+    });
+  }
+
+  console.log(`✅ Created ${3 + moreOrders.length} sample orders`);
+
+  // More reviews
+  const moreReviews = [
+    { userId: customers[1].id, bookId: allBooks[1].id, rating: 4, comment: 'کتاب خوبی بود، پیشنهاد می‌کنم.' },
+    { userId: customers[0].id, bookId: allBooks[5].id, rating: 5, comment: 'تاریخ فلسفه عالی نوشته شده.' },
+    { userId: customers[1].id, bookId: allBooks[9].id, rating: 4, comment: 'کلیله و دمنه همیشه جذابه.' },
+    { userId: customers[0].id, bookId: allBooks[11].id, rating: 3, comment: 'محتوا خوب ولی چاپ متوسط بود.' },
+    { userId: customers[1].id, bookId: allBooks[13].id, rating: 5, comment: 'کتاب هنر عالیه.' },
+    { userId: customers[0].id, bookId: allBooks[16].id, rating: 4, comment: 'روانشناسی کاربردی خوبی بود.' },
+    { userId: customers[1].id, bookId: allBooks[18].id, rating: 5, comment: 'شعر نو نیما بی‌نظیره.' },
+    { userId: customers[0].id, bookId: allBooks[19].id, rating: 4, comment: 'شیمی عمومی برای دانشگاه عالیه.' },
+  ];
+
+  for (const review of moreReviews) {
+    await prisma.review.create({ data: review });
+  }
+
+  console.log(`✅ Created ${reviews.length + moreReviews.length} total reviews`);
+
+  // More wallet transactions
+  const moreTransactions = [
+    { sellerId: sellerProfiles[0].id, amount: 85000, type: 'CREDIT' as const, description: 'فروش داش آکل' },
+    { sellerId: sellerProfiles[0].id, amount: 40000, type: 'DEBIT' as const, description: 'کمیسیون سفارش' },
+    { sellerId: sellerProfiles[1].id, amount: 245000, type: 'CREDIT' as const, description: 'فروش تاریخ فلسفه غرب' },
+    { sellerId: sellerProfiles[2].id, amount: 136000, type: 'CREDIT' as const, description: 'فروش کلیله و دمنه' },
+    { sellerId: sellerProfiles[2].id, amount: 500000, type: 'CREDIT' as const, description: 'شارژ کیف پول' },
+    { sellerId: sellerProfiles[0].id, amount: 92000, type: 'CREDIT' as const, description: 'فروش صد سال تنهایی' },
+  ];
+
+  for (const txn of moreTransactions) {
+    await prisma.walletTransaction.create({ data: txn });
+  }
+
+  console.log(`✅ Created ${transactions.length + moreTransactions.length} total wallet transactions`);
 
   console.log('🎉 Seeding completed!');
   console.log('\n📋 Login credentials:');

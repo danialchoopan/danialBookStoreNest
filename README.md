@@ -1,7 +1,9 @@
-# BookNest - Multi-Vendor Bookstore Platform
+# 📚 BookNest - Multi-Vendor Bookstore Platform
 
 ## Overview
-A full-stack multi-vendor bookstore platform built with Next.js and NestJS, featuring Persian (Farsi) RTL interface.
+BookNest is a full-stack multi-vendor bookstore platform built with Next.js and NestJS. Users can browse, search, and order books. Vendors manage their products and earnings. Admins control the entire platform.
+
+[README فارسی](README_FA.md)
 
 ## Tech Stack
 - **Frontend:** Next.js 14 (App Router), React, Tailwind CSS, Zustand, TanStack Query
@@ -9,16 +11,26 @@ A full-stack multi-vendor bookstore platform built with Next.js and NestJS, feat
 - **Infrastructure:** Docker, Docker Compose
 
 ## Features
-- JWT Authentication with Role-based Access (Admin, Seller, Customer)
-- Product Management (Books with ISBN, Authors, Categories)
-- Advanced Search & Filtering
-- Shopping Cart & Multi-step Checkout
-- Order Management & History
-- Seller Dashboard (Sales stats, Wallet, Product management)
-- Admin Dashboard (Users, Sellers, Commission, Categories)
-- Reviews & Ratings System
-- Redis Caching
-- Swagger API Documentation
+
+### Customer
+- JWT authentication with role-based access
+- Advanced book search with category and price filters
+- Multi-step checkout flow
+- Order history and tracking
+- Book reviews and ratings
+
+### Vendor
+- Dashboard with sales stats and revenue
+- Product management (CRUD books)
+- Order management with status workflow
+- Wallet with top-up and transaction history
+
+### Admin
+- Dashboard with charts and system overview
+- User management (activate/deactivate, role changes)
+- Vendor management (approve/reject, commission settings)
+- Category management with hierarchy
+- Full order and review visibility
 
 ## Quick Start
 
@@ -31,7 +43,7 @@ A full-stack multi-vendor bookstore platform built with Next.js and NestJS, feat
 
 ```bash
 # 1. Clone and install
-git clone <repo-url>
+git clone https://github.com/danialchoopan/danialBookStoreNest.git
 cd booknestjsshop
 
 # 2. Start Docker services (PostgreSQL + Redis)
@@ -57,34 +69,75 @@ npm run dev
 - Swagger Docs: http://localhost:4000/api/docs
 
 ### Test Accounts
+
 | Role | Email | Password |
 |------|-------|----------|
 | Admin | admin@booknest.ir | admin123 |
-| Seller | seller1@booknest.ir | seller123 |
+| Vendor | seller1@booknest.ir | seller123 |
 | Customer | customer1@booknest.ir | customer123 |
 
 ## Project Structure
+
 ```
 booknestjsshop/
-├── backend/          # NestJS API
-│   ├── prisma/       # Schema & Seeds
+├── backend/              # NestJS API
+│   ├── prisma/           # Schema & Seeds
 │   └── src/
-│       ├── common/   # Guards, Decorators, Filters, Interceptors
-│       ├── modules/  # Auth, Books, Cart, Orders, Seller, Admin, Reviews, Payments
-│       └── prisma/   # Prisma Service
-├── frontend/         # Next.js App
-│   ├── app/          # Pages (RTL)
-│   ├── components/   # UI Components
-│   └── lib/          # API Client, Stores
-└── docker-compose.yml
+│       ├── common/       # Guards, Decorators, Filters, Interceptors, Redis
+│       ├── modules/      # Auth, Books, Cart, Orders, Seller, Admin, Reviews, Payments
+│       └── prisma/       # Prisma Service
+├── frontend/             # Next.js App (RTL)
+│   ├── app/              # Pages (Persian UI)
+│   ├── components/       # UI Components
+│   ├── lib/              # API Client, Stores, Utils
+│   └── types/            # TypeScript Types
+├── docker-compose.yml
+├── README.md
+└── README_FA.md
 ```
 
+## API Endpoints
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | /api/auth/register | Register new user | No |
+| POST | /api/auth/login | Login | No |
+| GET | /api/auth/profile | Get current user | Yes |
+| GET | /api/books | List books (search/filter) | No |
+| GET | /api/books/:id | Book detail | No |
+| POST | /api/books | Create book | Seller |
+| PUT | /api/books/:id | Update book | Seller |
+| DELETE | /api/books/:id | Delete book | Seller |
+| GET | /api/cart | Get cart | Yes |
+| POST | /api/cart/items | Add to cart | Yes |
+| PUT | /api/cart/items/:id | Update quantity | Yes |
+| DELETE | /api/cart/items/:id | Remove item | Yes |
+| POST | /api/orders | Create order | Yes |
+| GET | /api/orders | My orders | Yes |
+| GET | /api/reviews/book/:id | Book reviews | No |
+| POST | /api/reviews/book/:id | Add review | Yes |
+| GET | /api/seller/dashboard | Vendor dashboard | Seller |
+| GET | /api/seller/books | Vendor's books | Seller |
+| GET | /api/seller/orders | Vendor's orders | Seller |
+| POST | /api/payments/wallet/topup | Top up wallet | Seller |
+| GET | /api/admin/dashboard | Admin dashboard | Admin |
+| GET | /api/admin/sellers | List vendors | Admin |
+| PATCH | /api/admin/sellers/:id/approve | Approve vendor | Admin |
+| PATCH | /api/admin/sellers/:id/commission | Set commission | Admin |
+| GET | /api/users | List users | Admin |
+
 ## Environment Variables
+
 See `.env.example` for required variables:
-- `DATABASE_URL` - PostgreSQL connection
-- `REDIS_URL` - Redis connection
-- `JWT_SECRET` - JWT signing secret
-- `PORT` - Backend port (default: 4000)
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| DATABASE_URL | PostgreSQL connection | Required |
+| REDIS_URL | Redis connection | Required |
+| JWT_SECRET | JWT signing secret | Required |
+| JWT_EXPIRES_IN | Token expiry | 7d |
+| PORT | Backend port | 4000 |
 
 ## License
+
 MIT

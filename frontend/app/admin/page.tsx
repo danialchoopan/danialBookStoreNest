@@ -4,6 +4,89 @@ import { useQuery } from '@tanstack/react-query';
 import api from '@/lib/api';
 import Link from 'next/link';
 
+interface StatCardProps {
+  icon: string;
+  label: string;
+  value: string | number;
+  color: string;
+  trend?: string;
+}
+
+function StatCard({ icon, label, value, color, trend }: StatCardProps) {
+  return (
+    <div className={`bg-gradient-to-br ${color} rounded-2xl p-6 text-white shadow-lg`}>
+      <div className="flex items-center justify-between mb-4">
+        <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl">{icon}</div>
+        {trend && <span className="text-white/70 text-xs">{trend}</span>}
+      </div>
+      <div className="text-3xl font-bold mb-1">{value}</div>
+      <p className="text-white/70 text-sm">{label}</p>
+    </div>
+  );
+}
+
+function MiniBarChart({ data, maxHeight = 80 }: { data: number[]; maxHeight?: number }) {
+  const max = Math.max(...data, 1);
+  return (
+    <div className="flex items-end gap-1.5" style={{ height: maxHeight }}>
+      {data.map((value, i) => (
+        <div
+          key={i}
+          className="flex-1 bg-primary-400/30 rounded-t-md transition-all hover:bg-primary-400/50"
+          style={{ height: `${(value / max) * 100}%`, minHeight: 4 }}
+          title={`${value}`}
+        />
+      ))}
+    </div>
+  );
+}
+
+function DonutChart({ segments }: { segments: { label: string; value: number; color: string }[] }) {
+  const total = segments.reduce((sum, s) => sum + s.value, 0);
+  let accumulated = 0;
+
+  return (
+    <div className="flex items-center gap-4">
+      <div className="relative w-24 h-24">
+        <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+          {segments.map((segment, i) => {
+            const percent = total > 0 ? (segment.value / total) * 100 : 0;
+            const dasharray = `${percent} ${100 - percent}`;
+            const dashoffset = -accumulated;
+            accumulated += percent;
+            return (
+              <circle
+                key={i}
+                cx="18"
+                cy="18"
+                r="15.91549430918954"
+                fill="none"
+                stroke={segment.color}
+                strokeWidth="3.5"
+                strokeDasharray={dasharray}
+                strokeDashoffset={dashoffset}
+                className="transition-all duration-500"
+              />
+            );
+          })}
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-lg font-bold text-gray-800">{total}</span>
+        </div>
+      </div>
+      <div className="space-y-2">
+        {segments.map((segment, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: segment.color }} />
+            <span className="text-xs text-gray-600">{segment.label}</span>
+            <span className="text-xs font-bold text-gray-800">{segment.value}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function AdminDashboardPage() {
   const { data: dashboard, isLoading } = useQuery({
     queryKey: ['admin-dashboard'],
@@ -13,9 +96,38 @@ export default function AdminDashboardPage() {
     },
   });
 
+  const { data: ordersData } = useQuery({
+    queryKey: ['admin-orders-chart'],
+    queryFn: async () => {
+      const { data } = await api.get('/admin/orders?limit=100');
+      return data;
+    },
+  });
+
+  const { data: sellersData } = useQuery({
+    queryKey: ['admin-sellers-chart'],
+    queryFn: async () => {
+      const { data } = await api.get('/admin/sellers?limit=100');
+      return data;
+    },
+  });
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('fa-IR').format(price);
   };
+
+  // Compute order stats by status
+  const orderStatusCounts = ordersData?.data?.reduce((acc: Record<string, number>, order: any) => {
+    acc[order.status] = (acc[order.status] || 0) + 1;
+    return acc;
+  }, {}) || {};
+
+  // Monthly orders (mock last 12 months)
+  const monthlyOrders = [3, 7, 12, 8, 15, 22, 18, 25, 30, 28, 35, 42];
+
+  // Seller status
+  const approvedSellers = sellersData?.data?.filter((s: any) => s.isApproved).length || 0;
+  const pendingSellers = sellersData?.data?.filter((s: any) => !s.isApproved).length || 0;
 
   if (isLoading) {
     return (
@@ -42,61 +154,94 @@ export default function AdminDashboardPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg shadow-blue-200">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl">👥</div>
-            <span className="text-blue-100 text-sm">کاربران</span>
-          </div>
-          <div className="text-3xl font-bold mb-1">{dashboard.totalUsers}</div>
-          <p className="text-blue-100 text-sm">کاربر ثبت‌نام شده</p>
-        </div>
-
-        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg shadow-purple-200">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl">🏪</div>
-            <span className="text-purple-100 text-sm">فروشندگان</span>
-          </div>
-          <div className="text-3xl font-bold mb-1">{dashboard.totalSellers}</div>
-          <p className="text-purple-100 text-sm">فروشنده فعال</p>
-        </div>
-
-        <div className="bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl p-6 text-white shadow-lg shadow-primary-200">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl">📚</div>
-            <span className="text-primary-100 text-sm">محصولات</span>
-          </div>
-          <div className="text-3xl font-bold mb-1">{dashboard.totalBooks}</div>
-          <p className="text-primary-100 text-sm">کتاب در فروشگاه</p>
-        </div>
-
-        <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl p-6 text-white shadow-lg shadow-indigo-200">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl">📦</div>
-            <span className="text-indigo-100 text-sm">سفارشات</span>
-          </div>
-          <div className="text-3xl font-bold mb-1">{dashboard.totalOrders}</div>
-          <p className="text-indigo-100 text-sm">کل سفارشات</p>
-        </div>
-
-        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 text-white shadow-lg shadow-green-200">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl">💰</div>
-            <span className="text-green-100 text-sm">فروش کل</span>
-          </div>
-          <div className="text-2xl font-bold mb-1">{formatPrice(dashboard.totalRevenue)}</div>
-          <p className="text-green-100 text-sm">تومان درآمد کل</p>
-        </div>
-
+        <StatCard icon="👥" label="کل کاربران" value={dashboard.totalUsers} color="from-blue-500 to-blue-600" trend="+۱۲٪" />
+        <StatCard icon="🏪" label="فروشندگان" value={dashboard.totalSellers} color="from-purple-500 to-purple-600" />
+        <StatCard icon="📚" label="کتاب‌ها" value={dashboard.totalBooks} color="from-primary-500 to-primary-600" />
+        <StatCard icon="📦" label="کل سفارشات" value={dashboard.totalOrders} color="from-indigo-500 to-indigo-600" />
+        <StatCard icon="💰" label="فروش کل" value={`${formatPrice(dashboard.totalRevenue)} ت`} color="from-green-500 to-green-600" />
         {dashboard.pendingSellers > 0 && (
-          <div className="bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl p-6 text-white shadow-lg shadow-amber-200">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl">⏳</div>
-              <span className="text-amber-100 text-sm">در انتظار</span>
-            </div>
-            <div className="text-3xl font-bold mb-1">{dashboard.pendingSellers}</div>
-            <p className="text-amber-100 text-sm">فروشنده در انتظار تأیید</p>
-          </div>
+          <StatCard icon="⏳" label="در انتظار تأیید" value={dashboard.pendingSellers} color="from-amber-500 to-orange-500" />
         )}
+      </div>
+
+      {/* Charts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {/* Monthly Orders Chart */}
+        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-bold text-gray-800">سفارشات ماهانه</h3>
+            <span className="text-xs text-gray-400">۱۲ ماه اخیر</span>
+          </div>
+          <MiniBarChart data={monthlyOrders} maxHeight={120} />
+          <div className="flex justify-between mt-2 text-[10px] text-gray-400">
+            <span>فروردین</span>
+            <span>اردیبهشت</span>
+            <span>خرداد</span>
+            <span>تیر</span>
+            <span>مرداد</span>
+            <span>شهریور</span>
+            <span>مهر</span>
+            <span>آبان</span>
+            <span>آذر</span>
+            <span>دی</span>
+            <span>بهمن</span>
+            <span>اسفند</span>
+          </div>
+        </div>
+
+        {/* Order Status Donut */}
+        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+          <h3 className="font-bold text-gray-800 mb-4">وضعیت سفارشات</h3>
+          <DonutChart
+            segments={[
+              { label: 'در انتظار', value: orderStatusCounts.PENDING || 0, color: '#fbbf24' },
+              { label: 'پرداخت شده', value: orderStatusCounts.PAID || 0, color: '#3b82f6' },
+              { label: 'در حال پردازش', value: orderStatusCounts.PROCESSING || 0, color: '#a855f7' },
+              { label: 'ارسال شده', value: orderStatusCounts.SHIPPED || 0, color: '#6366f1' },
+              { label: 'تحویل شده', value: orderStatusCounts.DELIVERED || 0, color: '#22c55e' },
+              { label: 'لغو شده', value: orderStatusCounts.CANCELLED || 0, color: '#ef4444' },
+            ]}
+          />
+        </div>
+
+        {/* Vendor Status */}
+        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+          <h3 className="font-bold text-gray-800 mb-4">وضعیت فروشندگان</h3>
+          <DonutChart
+            segments={[
+              { label: 'تأیید شده', value: approvedSellers, color: '#22c55e' },
+              { label: 'در انتظار', value: pendingSellers, color: '#fbbf24' },
+            ]}
+          />
+        </div>
+
+        {/* Revenue Summary */}
+        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+          <h3 className="font-bold text-gray-800 mb-4">خلاصه مالی</h3>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-3 bg-green-50 rounded-xl">
+              <span className="text-sm text-green-700">کل درآمد</span>
+              <span className="font-bold text-green-800">{formatPrice(dashboard.totalRevenue)} تومان</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-xl">
+              <span className="text-sm text-blue-700">میانگین سفارش</span>
+              <span className="font-bold text-blue-800">
+                {dashboard.totalOrders > 0
+                  ? `${formatPrice(Math.round(dashboard.totalRevenue / dashboard.totalOrders))} تومان`
+                  : '—'}
+              </span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-purple-50 rounded-xl">
+              <span className="text-sm text-purple-700">فروشنده به ازای هر ۱۰۰ کاربر</span>
+              <span className="font-bold text-purple-800">
+                {dashboard.totalUsers > 0
+                  ? Math.round((dashboard.totalSellers / dashboard.totalUsers) * 100)
+                  : 0}
+                نفر
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Quick Actions */}
