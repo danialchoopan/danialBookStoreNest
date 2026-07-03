@@ -33,9 +33,7 @@ export class CreateBookDto {
   stock: number;
 
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  images?: string[];
+  images?: string | string[];
 
   @IsOptional()
   @IsBoolean()

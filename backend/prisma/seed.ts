@@ -1,4 +1,4 @@
-import { PrismaClient, Role } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -53,30 +53,30 @@ async function main() {
       password: adminPassword,
       firstName: 'مدیر',
       lastName: 'سیستم',
-      role: Role.ADMIN,
+      role: 'ADMIN',
       phone: '09121234567',
     },
   });
 
   const sellerPassword = await bcrypt.hash('seller123', 10);
   const sellers = await Promise.all([
-    prisma.user.create({ data: { email: 'seller1@booknest.ir', password: sellerPassword, firstName: 'علی', lastName: 'احمدی', role: Role.SELLER, phone: '09121111111' } }),
-    prisma.user.create({ data: { email: 'seller2@booknest.ir', password: sellerPassword, firstName: 'زهرا', lastName: 'کریمی', role: Role.SELLER, phone: '09122222222' } }),
-    prisma.user.create({ data: { email: 'seller3@booknest.ir', password: sellerPassword, firstName: 'رضا', lastName: 'موسوی', role: Role.SELLER, phone: '09123333333' } }),
-    prisma.user.create({ data: { email: 'seller4@booknest.ir', password: sellerPassword, firstName: 'مریم', lastName: 'نوری', role: Role.SELLER, phone: '09124444444' } }),
-    prisma.user.create({ data: { email: 'seller5@booknest.ir', password: sellerPassword, firstName: 'حسن', lastName: 'جانمحمدی', role: Role.SELLER, phone: '09125555555' } }),
+    prisma.user.create({ data: { email: 'seller1@booknest.ir', password: sellerPassword, firstName: 'علی', lastName: 'احمدی',       role: 'SELLER', phone: '09121111111' } }),
+    prisma.user.create({ data: { email: 'seller2@booknest.ir', password: sellerPassword, firstName: 'زهرا', lastName: 'کریمی',       role: 'SELLER', phone: '09122222222' } }),
+    prisma.user.create({ data: { email: 'seller3@booknest.ir', password: sellerPassword, firstName: 'رضا', lastName: 'موسوی',       role: 'SELLER', phone: '09123333333' } }),
+    prisma.user.create({ data: { email: 'seller4@booknest.ir', password: sellerPassword, firstName: 'مریم', lastName: 'نوری',       role: 'SELLER', phone: '09124444444' } }),
+    prisma.user.create({ data: { email: 'seller5@booknest.ir', password: sellerPassword, firstName: 'حسن', lastName: 'جانمحمدی',       role: 'SELLER', phone: '09125555555' } }),
   ]);
 
   const customerPassword = await bcrypt.hash('customer123', 10);
   const customers = await Promise.all([
-    prisma.user.create({ data: { email: 'customer1@booknest.ir', password: customerPassword, firstName: 'سارا', lastName: 'رضایی', role: Role.CUSTOMER, phone: '09131111111' } }),
-    prisma.user.create({ data: { email: 'customer2@booknest.ir', password: customerPassword, firstName: 'محمد', lastName: 'حسینی', role: Role.CUSTOMER, phone: '09132222222' } }),
-    prisma.user.create({ data: { email: 'customer3@booknest.ir', password: customerPassword, firstName: 'نیلوفر', lastName: 'صمدی', role: Role.CUSTOMER, phone: '09133333333' } }),
-    prisma.user.create({ data: { email: 'customer4@booknest.ir', password: customerPassword, firstName: 'امیر', lastName: 'каспی', role: Role.CUSTOMER, phone: '09134444444' } }),
-    prisma.user.create({ data: { email: 'customer5@booknest.ir', password: customerPassword, firstName: 'لیلا', lastName: 'محمدی', role: Role.CUSTOMER, phone: '09135555555' } }),
-    prisma.user.create({ data: { email: 'customer6@booknest.ir', password: customerPassword, firstName: 'بهنام', lastName: 'ставрی', role: Role.CUSTOMER, phone: '09136666666' } }),
-    prisma.user.create({ data: { email: 'customer7@booknest.ir', password: customerPassword, firstName: 'نرگس', lastName: 'جعفری', role: Role.CUSTOMER, phone: '09137777777' } }),
-    prisma.user.create({ data: { email: 'customer8@booknest.ir', password: customerPassword, firstName: 'فرهاد', lastName: 'اکبری', role: Role.CUSTOMER, phone: '09138888888' } }),
+    prisma.user.create({ data: { email: 'customer1@booknest.ir', password: customerPassword, firstName: 'سارا', lastName: 'رضایی',       role: 'CUSTOMER', phone: '09131111111' } }),
+    prisma.user.create({ data: { email: 'customer2@booknest.ir', password: customerPassword, firstName: 'محمد', lastName: 'حسینی',       role: 'CUSTOMER', phone: '09132222222' } }),
+    prisma.user.create({ data: { email: 'customer3@booknest.ir', password: customerPassword, firstName: 'نیلوفر', lastName: 'صمدی',       role: 'CUSTOMER', phone: '09133333333' } }),
+    prisma.user.create({ data: { email: 'customer4@booknest.ir', password: customerPassword, firstName: 'امیر', lastName: 'каспی',       role: 'CUSTOMER', phone: '09134444444' } }),
+    prisma.user.create({ data: { email: 'customer5@booknest.ir', password: customerPassword, firstName: 'لیلا', lastName: 'محمدی',       role: 'CUSTOMER', phone: '09135555555' } }),
+    prisma.user.create({ data: { email: 'customer6@booknest.ir', password: customerPassword, firstName: 'بهنام', lastName: 'ставрی',       role: 'CUSTOMER', phone: '09136666666' } }),
+    prisma.user.create({ data: { email: 'customer7@booknest.ir', password: customerPassword, firstName: 'نرگس', lastName: 'جعفری',       role: 'CUSTOMER', phone: '09137777777' } }),
+    prisma.user.create({ data: { email: 'customer8@booknest.ir', password: customerPassword, firstName: 'فرهاد', lastName: 'اکبری',       role: 'CUSTOMER', phone: '09138888888' } }),
   ]);
 
   console.log(`✅ Created 1 admin, ${sellers.length} sellers, ${customers.length} customers`);
@@ -140,7 +140,7 @@ async function main() {
         comparePrice: Math.round(bookData.price * 1.15),
         stock: bookData.stock,
         isPublished: true,
-        images: [`/books/${slugify(bookData.title)}.jpg`],
+        images: JSON.stringify([`/books/${slugify(bookData.title)}.jpg`]),
         categories: {
           create: bookData.catIdx.map((idx) => ({ categoryId: categories[idx]?.id || categories[0].id })),
         },
@@ -258,7 +258,7 @@ async function main() {
           userId: customers[customerIdx].id,
           status: status as any,
           totalAmount,
-          shippingAddress: addresses[addrIdx],
+          shippingAddress: JSON.stringify(addresses[addrIdx]),
           createdAt: randomDate(90),
           items: { create: items },
         },
@@ -271,21 +271,21 @@ async function main() {
 
   // ─── WALLET TRANSACTIONS ─────────────────────────────
   const walletData = [
-    { sellerId: sellerProfiles[0].id, amount: 2500000, type: 'CREDIT' as const, description: 'شارژ اولیه کیف پول' },
-    { sellerId: sellerProfiles[0].id, amount: 850000, type: 'CREDIT' as const, description: 'فروش بوف کور - ۱۰ نسخه' },
-    { sellerId: sellerProfiles[0].id, amount: 120000, type: 'DEBIT' as const, description: 'کمیسیون سفارشات آبان ماه' },
-    { sellerId: sellerProfiles[0].id, amount: 720000, type: 'CREDIT' as const, description: 'فروش شازده احتجاب' },
-    { sellerId: sellerProfiles[1].id, amount: 3200000, type: 'CREDIT' as const, description: 'شارژ اولیه کیف پول' },
-    { sellerId: sellerProfiles[1].id, amount: 950000, type: 'CREDIT' as const, description: 'فروش فلسفه چیست' },
-    { sellerId: sellerProfiles[1].id, amount: 2450000, type: 'CREDIT' as const, description: 'فروش تاریخ فلسفه غرب' },
-    { sellerId: sellerProfiles[1].id, amount: 180000, type: 'DEBIT' as const, description: 'کمیسیون سفارشات آذر ماه' },
-    { sellerId: sellerProfiles[2].id, amount: 1800000, type: 'CREDIT' as const, description: 'شارژ اولیه کیف پول' },
-    { sellerId: sellerProfiles[2].id, amount: 350000, type: 'CREDIT' as const, description: 'فروش خاله سوسکه - ۱۰ نسخه' },
-    { sellerId: sellerProfiles[2].id, amount: 136000, type: 'CREDIT' as const, description: 'فروش کلیله و دمنه' },
-    { sellerId: sellerProfiles[2].id, amount: 500000, type: 'CREDIT' as const, description: 'شارژ کیف پول' },
-    { sellerId: sellerProfiles[3].id, amount: 2400000, type: 'CREDIT' as const, description: 'شارژ اولیه کیف پول' },
-    { sellerId: sellerProfiles[3].id, amount: 1250000, type: 'CREDIT' as const, description: 'فروش برنامه‌نویسی جاوااسکریپت' },
-    { sellerId: sellerProfiles[3].id, amount: 95000, type: 'DEBIT' as const, description: 'کمیسیون فروش دی ماه' },
+    { sellerId: sellerProfiles[0].id, amount: 2500000, type: 'CREDIT', description: 'شارژ اولیه کیف پول' },
+    { sellerId: sellerProfiles[0].id, amount: 850000, type: 'CREDIT', description: 'فروش بوف کور - ۱۰ نسخه' },
+    { sellerId: sellerProfiles[0].id, amount: 120000, type: 'DEBIT', description: 'کمیسیون سفارشات آبان ماه' },
+    { sellerId: sellerProfiles[0].id, amount: 720000, type: 'CREDIT', description: 'فروش شازده احتجاب' },
+    { sellerId: sellerProfiles[1].id, amount: 3200000, type: 'CREDIT', description: 'شارژ اولیه کیف پول' },
+    { sellerId: sellerProfiles[1].id, amount: 950000, type: 'CREDIT', description: 'فروش فلسفه چیست' },
+    { sellerId: sellerProfiles[1].id, amount: 2450000, type: 'CREDIT', description: 'فروش تاریخ فلسفه غرب' },
+    { sellerId: sellerProfiles[1].id, amount: 180000, type: 'DEBIT', description: 'کمیسیون سفارشات آذر ماه' },
+    { sellerId: sellerProfiles[2].id, amount: 1800000, type: 'CREDIT', description: 'شارژ اولیه کیف پول' },
+    { sellerId: sellerProfiles[2].id, amount: 350000, type: 'CREDIT', description: 'فروش خاله سوسکه - ۱۰ نسخه' },
+    { sellerId: sellerProfiles[2].id, amount: 136000, type: 'CREDIT', description: 'فروش کلیله و دمنه' },
+    { sellerId: sellerProfiles[2].id, amount: 500000, type: 'CREDIT', description: 'شارژ کیف پول' },
+    { sellerId: sellerProfiles[3].id, amount: 2400000, type: 'CREDIT', description: 'شارژ اولیه کیف پول' },
+    { sellerId: sellerProfiles[3].id, amount: 1250000, type: 'CREDIT', description: 'فروش برنامه‌نویسی جاوااسکریپت' },
+    { sellerId: sellerProfiles[3].id, amount: 95000, type: 'DEBIT', description: 'کمیسیون فروش دی ماه' },
   ];
 
   for (const txn of walletData) {
