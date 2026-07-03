@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swagger Auth Testing - BookNest Docs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 2rem; margin-bottom: 10px; }
+        h2 { font-size: 1.4rem; margin: 35px 0 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        h3 { font-size: 1.1rem; margin: 20px 0 8px; color: #334155; }
+        p { margin-bottom: 10px; color: #475569; }
+        a { color: #059669; text-decoration: none; }
+        pre { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; overflow-x: auto; margin: 12px 0; font-size: 0.85rem; line-height: 1.6; }
+        code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: #059669; font-family: 'SF Mono', Consolas, monospace; }
+        pre code { background: none; color: inherit; padding: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+        th { background: #f1f5f9; padding: 10px 14px; text-align: left; font-size: 0.85rem; }
+        td { padding: 8px 14px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; color: #475569; }
+        .nav { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 20px; margin-bottom: 30px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav a { font-weight: 500; font-size: 0.9rem; }
+        .step { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 12px 0; }
+        .step-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #059669; color: white; border-radius: 50%; font-size: 0.8rem; font-weight: 700; margin-left: 8px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="nav">
+        <a href="index.html">← Home</a>
+        <a href="ARCHITECTURE.html">Architecture</a>
+        <a href="BACKEND.html">Backend</a>
+        <a href="API.html">API</a>
+        <a href="DEVELOPMENT.html">Development</a>
+    </nav>
+
+    <h1>🔐 Swagger Auth Testing Guide</h1>
+    <p>How to test authenticated endpoints in Swagger UI.</p>
+
+    <h2>Quick Start</h2>
+    <p>Open <code>http://localhost:4000/api/docs</code> in your browser.</p>
+
+    <h2>Step-by-Step</h2>
+
+    <div class="step">
+        <p><span class="step-num">1</span><strong>Login to get a token</strong></p>
+        <p>Find <code>POST /api/auth/login</code> and send:</p>
+        <pre><code>{
+  "email": "admin@booknest.ir",
+  "password": "admin123"
+}</code></pre>
+        <p>Copy the <code>accessToken</code> from the response.</p>
+    </div>
+
+    <div class="step">
+        <p><span class="step-num">2</span><strong>Authorize in Swagger</strong></p>
+        <ol style="padding-right: 20px; color: #475569;">
+            <li>Click the <strong>"Authorize"</strong> button (top right of Swagger)</li>
+            <li>In the "Bearer" field, paste your token (without "Bearer " prefix)</li>
+            <li>Click <strong>"Authorize"</strong></li>
+            <li>Close the dialog — you're now authenticated!</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <p><span class="step-num">3</span><strong>Test protected endpoints</strong></p>
+        <p>Now try any endpoint with 🔒 — it will use your token automatically.</p>
+    </div>
+
+    <h2>Test Accounts for Swagger</h2>
+    <table>
+        <tr><th>Role</th><th>Email</th><th>Password</th><th>Can Test</th></tr>
+        <tr><td>Admin</td><td>admin@booknest.ir</td><td>admin123</td><td>All admin endpoints, user management</td></tr>
+        <tr><td>Seller</td><td>seller1@booknest.ir</td><td>seller123</td><td>Products, orders, wallet, dashboard</td></tr>
+        <tr><td>Customer</td><td>customer1@booknest.ir</td><td>customer123</td><td>Cart, checkout, orders, wishlist, reviews</td></tr>
+    </table>
+
+    <h2>Testing Flow</h2>
+    <pre><code># 1. Register (no auth needed)
+POST /api/auth/register
+{ "email": "new@booknest.ir", "password": "pass12345", "firstName": "تست", "lastName": "کاربر" }
+
+# 2. Login
+POST /api/auth/login
+{ "email": "new@booknest.ir", "password": "pass12345" }
+# → Copy accessToken
+
+# 3. Use token in Authorize dialog
+
+# 4. Test endpoints
+GET /api/books                    # Public - no auth needed
+GET /api/auth/profile             # Protected - needs token
+POST /api/cart/items              # Protected - needs token
+GET /api/seller/dashboard         # Protected - needs SELLER role
+GET /api/admin/dashboard          # Protected - needs ADMIN role</code></pre>
+
+    <h2>Common Issues</h2>
+    <table>
+        <tr><th>Issue</th><th>Solution</th></tr>
+        <tr><td>401 Unauthorized</td><td>Token expired or not set. Re-login and re-authorize.</td></tr>
+        <tr><td>403 Forbidden</td><td>Wrong role. Use the correct account for the endpoint.</td></tr>
+        <tr><td>400 Validation Error</td><td>Check request body format in the DTO docs.</td></tr>
+    </table>
+</div>
+</body>
+</html>

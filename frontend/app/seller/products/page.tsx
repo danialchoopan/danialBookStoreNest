@@ -5,6 +5,7 @@ import api from '@/lib/api';
 import Link from 'next/link';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import ImageUpload from '@/components/ui/ImageUpload';
 
 export default function SellerProductsPage() {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -17,6 +18,7 @@ export default function SellerProductsPage() {
     price: '',
     stock: '',
   });
+  const [newBookImages, setNewBookImages] = useState<string[]>([]);
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['seller-books'],
@@ -33,10 +35,12 @@ export default function SellerProductsPage() {
         ...newBook,
         price: Number(newBook.price),
         stock: Number(newBook.stock),
+        images: newBookImages.length > 0 ? newBookImages : undefined,
       });
       toast.success('کتاب با موفقیت اضافه شد');
       setShowAddModal(false);
       setNewBook({ title: '', author: '', isbn: '', publisher: '', description: '', price: '', stock: '' });
+      setNewBookImages([]);
       refetch();
     } catch {
       toast.error('خطا در افزودن کتاب');
@@ -254,6 +258,10 @@ export default function SellerProductsPage() {
                   placeholder="توضیحات کتاب..."
                 />
               </div>
+              <ImageUpload
+                images={newBookImages}
+                onImagesChange={setNewBookImages}
+              />
               <div className="flex gap-3 pt-2">
                 <button
                   type="button"

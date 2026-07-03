@@ -17,11 +17,40 @@ body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
   font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* Dark mode */
+.dark {
+  --foreground-rgb: 241, 245, 249;
+  --background-rgb: 15, 23, 42;
+}
+
+.dark body,
+.dark {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+}
+
+.dark .bg-white { background-color: #1e293b; }
+.dark .bg-gray-50 { background-color: #1e293b; }
+.dark .bg-gray-100 { background-color: #334155; }
+.dark .text-gray-800 { color: #f1f5f9; }
+.dark .text-gray-700 { color: #e2e8f0; }
+.dark .text-gray-600 { color: #cbd5e1; }
+.dark .text-gray-500 { color: #94a3b8; }
+.dark .text-gray-400 { color: #64748b; }
+.dark .border-gray-100 { border-color: #334155; }
+.dark .border-gray-200 { border-color: #475569; }
+.dark .hover\:bg-gray-50:hover { background-color: #1e293b; }
+.dark .hover\:bg-gray-100:hover { background-color: #334155; }
+.dark .hover\:shadow-md:hover { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -35,4 +64,52 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+/* Mobile touch improvements */
+@media (max-width: 768px) {
+  /* Larger touch targets */
+  button, a, input, select, textarea {
+    min-height: 44px;
+  }
+
+  /* Better spacing on mobile */
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  /* Hide scrollbar on mobile */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  /* Prevent text zoom on input focus */
+  input, select, textarea {
+    font-size: 16px;
+  }
+
+  /* Better table scroll */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Safe area for notch devices */
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Smooth transitions for dark mode */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Disable transitions on load to prevent flash */
+.no-transitions * {
+  transition: none !important;
 }

@@ -17,6 +17,7 @@ import { WishlistModule } from './modules/wishlist/wishlist.module';
 import { EmailModule } from './modules/email/email.module';
 import { SearchModule } from './modules/search/search.module';
 import { ReportsModule } from './modules/reports/reports.module';
+import { WebSocketModule } from './common/websocket/websocket.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ReportsModule } from './modules/reports/reports.module';
     PrismaModule,
     RedisModule,
     EmailModule,
+    WebSocketModule,
     AuthModule,
     UsersModule,
     BooksModule,
