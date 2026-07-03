@@ -138,6 +138,12 @@ export default function OrdersPage() {
                       {order.items.length} کالا
                     </div>
                     <div className="flex items-center gap-4">
+                      <Link
+                        href={`/orders/${order.id}`}
+                        className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                      >
+                        مشاهده جزئیات و پیگیری →
+                      </Link>
                       <div className="text-left">
                         <span className="text-xs text-gray-500 block">مبلغ کل</span>
                         <span className="font-bold text-lg text-primary-600">{formatPrice(order.totalAmount)} تومان</span>

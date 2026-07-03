@@ -9,6 +9,7 @@ import { useCartStore } from '@/lib/cart-store';
 import { useAuthStore } from '@/lib/store';
 import toast from 'react-hot-toast';
 import ReviewSection from '@/components/books/ReviewSection';
+import WishlistButton from '@/components/books/WishlistButton';
 import { parseImages } from '@/lib/utils';
 
 export default function BookDetailPage() {
@@ -252,6 +253,11 @@ export default function BookDetailPage() {
                 </button>
               </div>
             )}
+
+            {/* Wishlist Button */}
+            <div className="mt-3">
+              <WishlistButton bookId={book.id} />
+            </div>
           </div>
 
           {/* Book Details */}
