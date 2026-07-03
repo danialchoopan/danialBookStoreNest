@@ -24,6 +24,7 @@ model User {
   orders        Order[]
   cart          Cart?
   reviews       Review[]
+  wishlist      Wishlist[]
 }
 
 model SellerProfile {
@@ -66,6 +67,7 @@ model Book {
   cartItems     CartItem[]
   orderItems    OrderItem[]
   reviews       Review[]
+  wishlist      Wishlist[]
 }
 
 model Category {
@@ -125,6 +127,7 @@ model Order {
 
   user            User        @relation(fields: [userId], references: [id])
   items           OrderItem[]
+  statusHistory   OrderStatusHistory[]
 }
 
 model OrderItem {
@@ -163,4 +166,26 @@ model WalletTransaction {
   createdAt   DateTime     @default(now())
 
   seller      SellerProfile @relation(fields: [sellerId], references: [id])
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  userId    String
+  bookId    String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  book      Book     @relation(fields: [bookId], references: [id])
+
+  @@unique([userId, bookId])
+}
+
+model OrderStatusHistory {
+  id        String   @id @default(cuid())
+  orderId   String
+  status    String
+  note      String?
+  createdAt DateTime @default(now())
+
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }

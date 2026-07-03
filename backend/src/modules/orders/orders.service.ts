@@ -1,10 +1,14 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { EmailService } from '../email/email.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 
 @Injectable()
 export class OrdersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private emailService: EmailService,
+  ) {}
 
   async create(userId: string, dto: CreateOrderDto) {
     const cart = await this.prisma.cart.findUnique({
@@ -40,7 +44,7 @@ export class OrdersService {
         data: {
           userId,
           totalAmount,
-          shippingAddress: dto.shippingAddress as any,
+          shippingAddress: JSON.stringify(dto.shippingAddress || {}),
           note: dto.note,
           items: {
             create: cart.items.map((item) => ({
@@ -55,6 +59,15 @@ export class OrdersService {
         include: { items: true },
       });
 
+      // Create initial status history
+      await tx.orderStatusHistory.create({
+        data: {
+          orderId: newOrder.id,
+          status: 'PENDING',
+          note: 'سفارش ثبت شد',
+        },
+      });
+
       for (const item of cart.items) {
         await tx.book.update({
           where: { id: item.bookId },
@@ -66,6 +79,28 @@ export class OrdersService {
 
       return newOrder;
     });
+
+    // Send confirmation email
+    try {
+      const user = await this.prisma.user.findUnique({ where: { id: userId } });
+      if (user) {
+        const items = await Promise.all(
+          order.items.map(async (item) => {
+            const book = await this.prisma.book.findUnique({ where: { id: item.bookId } });
+            return { title: book?.title || 'کتاب', quantity: item.quantity, price: Number(item.totalPrice) };
+          }),
+        );
+        await this.emailService.sendOrderConfirmation({
+          id: order.id,
+          email: user.email,
+          firstName: user.firstName,
+          items,
+          totalAmount: Number(order.totalAmount),
+        });
+      }
+    } catch {
+      // Don't fail order if email fails
+    }
 
     return order;
   }

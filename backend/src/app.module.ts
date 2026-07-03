@@ -12,12 +12,16 @@ import { SellerModule } from './modules/seller/seller.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
 import { PaymentsModule } from './modules/payments/payments.module';
+import { UploadModule } from './modules/upload/upload.module';
+import { WishlistModule } from './modules/wishlist/wishlist.module';
+import { EmailModule } from './modules/email/email.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     RedisModule,
+    EmailModule,
     AuthModule,
     UsersModule,
     BooksModule,
@@ -28,6 +32,8 @@ import { PaymentsModule } from './modules/payments/payments.module';
     AdminModule,
     ReviewsModule,
     PaymentsModule,
+    UploadModule,
+    WishlistModule,
   ],
 })
 export class AppModule {}
