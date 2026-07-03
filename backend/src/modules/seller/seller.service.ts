@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateSellerProfileDto } from './dto/seller.dto';
+import { UpdateSellerProfileDto } from './dto/update-seller.dto';
 
 @Injectable()
 export class SellerService {
@@ -21,6 +22,35 @@ export class SellerService {
     }
 
     return profile;
+  }
+
+  async updateProfile(userId: string, dto: UpdateSellerProfileDto) {
+    const profile = await this.prisma.sellerProfile.findUnique({
+      where: { userId },
+    });
+
+    if (!profile) {
+      throw new NotFoundException('پروفایل فروشنده یافت نشد');
+    }
+
+    const data: any = {};
+    if (dto.shopName) {
+      data.shopName = dto.shopName;
+      data.shopSlug = dto.shopName
+        .toLowerCase()
+        .replace(/[^a-z0-9\u0600-\u06FF]+/g, '-')
+        .replace(/^-|-$/g, '');
+    }
+    if (dto.description !== undefined) data.description = dto.description;
+    if (dto.logo !== undefined) data.logo = dto.logo;
+
+    return this.prisma.sellerProfile.update({
+      where: { userId },
+      data,
+      include: {
+        user: { select: { firstName: true, lastName: true, email: true } },
+      },
+    });
   }
 
   async createProfile(userId: string, dto: CreateSellerProfileDto) {

@@ -11,6 +11,7 @@ import {
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { SellerService } from './seller.service';
 import { CreateSellerProfileDto } from './dto/seller.dto';
+import { UpdateSellerProfileDto } from './dto/update-seller.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -38,6 +39,17 @@ export class SellerController {
     @Body() dto: CreateSellerProfileDto,
   ) {
     return this.sellerService.createProfile(userId, dto);
+  }
+
+  @Patch('profile')
+  @UseGuards(RolesGuard)
+  @Roles('SELLER')
+  @ApiOperation({ summary: 'بروزرسانی پروفایل فروشنده' })
+  updateProfile(
+    @CurrentUser('id') userId: string,
+    @Body() dto: UpdateSellerProfileDto,
+  ) {
+    return this.sellerService.updateProfile(userId, dto);
   }
 
   @Get('dashboard')

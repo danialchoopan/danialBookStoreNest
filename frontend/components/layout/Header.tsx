@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/lib/store';
 import { useCartStore } from '@/lib/cart-store';
+import DarkModeToggle from '@/components/ui/DarkModeToggle';
+import SearchAutocomplete from './SearchAutocomplete';
 
 export default function Header() {
   const { user, isAuthenticated, logout, loadUser } = useAuthStore();
   const { itemCount, fetchCart } = useCartStore();
-  const [searchQuery, setSearchQuery] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -47,37 +48,13 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* Search */}
-          <div className="flex-1 max-w-xl mx-6 lg:mx-8">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (searchQuery.trim()) {
-                  window.location.href = `/books?search=${encodeURIComponent(searchQuery)}`;
-                }
-              }}
-              className="relative"
-            >
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="جستجوی کتاب، نویسنده، ناشر..."
-                className="w-full px-4 py-2.5 pr-11 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white outline-none transition-all text-sm"
-              />
-              <button
-                type="submit"
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary-600 transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </button>
-            </form>
-          </div>
+          {/* Search Autocomplete */}
+          <SearchAutocomplete />
 
           {/* Nav */}
           <nav className="flex items-center gap-2">
+            <DarkModeToggle />
+
             <Link
               href="/books"
               className="hidden md:flex items-center gap-1.5 text-gray-600 hover:text-primary-600 transition-colors px-3 py-2 rounded-lg hover:bg-gray-50 text-sm font-medium"

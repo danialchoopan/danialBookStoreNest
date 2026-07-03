@@ -15,6 +15,8 @@ import { PaymentsModule } from './modules/payments/payments.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { WishlistModule } from './modules/wishlist/wishlist.module';
 import { EmailModule } from './modules/email/email.module';
+import { SearchModule } from './modules/search/search.module';
+import { ReportsModule } from './modules/reports/reports.module';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { EmailModule } from './modules/email/email.module';
     PaymentsModule,
     UploadModule,
     WishlistModule,
+    SearchModule,
+    ReportsModule,
   ],
 })
 export class AppModule {}
