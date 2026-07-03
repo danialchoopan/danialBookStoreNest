@@ -129,6 +129,9 @@ export class BooksService {
         sellerId: sellerProfile.id,
         ...dto,
         slug,
+        images: dto.images
+          ? JSON.stringify(Array.isArray(dto.images) ? dto.images : [dto.images])
+          : '[]',
         categories: dto.categoryIds?.length
           ? { create: dto.categoryIds.map((categoryId) => ({ categoryId })) }
           : undefined,

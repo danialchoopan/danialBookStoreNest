@@ -39,3 +39,17 @@ export function generateSlug(text: string): string {
 export function cn(...classes: (string | boolean | undefined | null)[]): string {
   return classes.filter(Boolean).join(' ');
 }
+
+/**
+ * Parse images from either array or JSON string (SQLite stores as string)
+ */
+export function parseImages(images: string[] | string | null | undefined): string[] {
+  if (!images) return [];
+  if (Array.isArray(images)) return images;
+  try {
+    const parsed = JSON.parse(images);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}

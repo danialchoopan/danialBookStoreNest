@@ -12,9 +12,19 @@ interface Book {
   author: string;
   price: number;
   comparePrice?: number;
-  images: string[];
+  images: string[] | string;
   averageRating: number | null;
   seller: { shopName: string };
+}
+
+function parseImages(images: string[] | string): string[] {
+  if (Array.isArray(images)) return images;
+  try {
+    const parsed = JSON.parse(images);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
 }
 
 export default function BookCard({ book }: { book: Book }) {

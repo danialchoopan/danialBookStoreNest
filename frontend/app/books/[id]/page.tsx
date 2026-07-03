@@ -9,6 +9,7 @@ import { useCartStore } from '@/lib/cart-store';
 import { useAuthStore } from '@/lib/store';
 import toast from 'react-hot-toast';
 import ReviewSection from '@/components/books/ReviewSection';
+import { parseImages } from '@/lib/utils';
 
 export default function BookDetailPage() {
   const params = useParams();

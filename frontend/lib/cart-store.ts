@@ -9,7 +9,7 @@ interface CartItem {
     title: string;
     slug: string;
     price: number;
-    images: string[];
+    images: string[] | string;
     stock: number;
     seller: { shopName: string };
   };
