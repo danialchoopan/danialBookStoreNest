@@ -36,7 +36,7 @@ export default function WishlistPage() {
   if (!isAuthenticated) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
-        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center text-4xl mb-4">🔒</div>
+        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4"><svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg></div>
         <h1 className="text-xl font-bold text-gray-800 mb-2">ورود لازم است</h1>
         <Link href="/login" className="bg-primary-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-primary-700">
           ورود به حساب
@@ -62,7 +62,7 @@ export default function WishlistPage() {
         </div>
       ) : !items?.length ? (
         <div className="text-center py-16">
-          <div className="text-5xl mb-4">❤️</div>
+          <svg className="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>
           <h2 className="text-xl font-bold text-gray-800 mb-2">هنوز کتابی ذخیره نکرده‌اید</h2>
           <p className="text-gray-500 mb-6">کتاب‌های مورد علاقه خود را اینجا ذخیره کنید.</p>
           <Link href="/books" className="bg-primary-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-primary-700">
@@ -81,7 +81,7 @@ export default function WishlistPage() {
               <div key={item.id} className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
                 <Link href={`/books/${book.id}`}>
                   <div className="h-40 bg-gradient-to-br from-primary-50 to-white flex items-center justify-center">
-                    <span className="text-5xl opacity-20 group-hover:scale-110 transition-transform">📖</span>
+                    <svg className="w-10 h-10 text-primary-200 opacity-50 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
                   </div>
                 </Link>
                 <div className="p-4">
