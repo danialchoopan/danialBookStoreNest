@@ -77,14 +77,14 @@ export default function HomePage() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-xl">🚚</div>
+              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center"><svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.144a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" /></svg></div>
               <div>
                 <div className="font-bold text-gray-800">ارسال رایگان</div>
                 <div className="text-sm text-gray-500">خرید بالای ۲۰۰K</div>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-xl">⭐</div>
+              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center"><svg className="w-6 h-6 text-purple-600" viewBox="0 0 24 24" fill="currentColor"><path d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" /></svg></div>
               <div>
                 <div className="font-bold text-gray-800">۴.۸</div>
                 <div className="text-sm text-gray-500">رضایت مشتریان</div>
@@ -112,7 +112,9 @@ export default function HomePage() {
               href={`/books?category=${cat.slug}`}
               className={`bg-gradient-to-br ${cat.color} border rounded-2xl p-5 text-center hover:shadow-lg hover:scale-[1.02] transition-all duration-200 group`}
             >
-              <span className="text-4xl block mb-3 group-hover:scale-110 transition-transform">{cat.emoji}</span>
+              <span className={`block mb-3 group-hover:scale-110 transition-transform ${cat.iconColor}`}>
+                <svg className="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+              </span>
               <span className="font-bold text-gray-700 text-sm">{cat.name}</span>
             </Link>
           ))}
@@ -142,17 +144,17 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100">
-              <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">🚚</div>
+              <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.144a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" /></svg></div>
               <h3 className="font-bold text-gray-800 mb-2 text-lg">ارسال سریع و رایگان</h3>
               <p className="text-gray-500 text-sm leading-relaxed">ارسال رایگان برای خریدهای بالای ۲۰۰ هزار تومان و تحویل در کمتر از ۳ روز</p>
             </div>
             <div className="bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100">
-              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">✅</div>
+              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
               <h3 className="font-bold text-gray-800 mb-2 text-lg">تضمین اصالت کتاب</h3>
               <p className="text-gray-500 text-sm leading-relaxed">تمام کتاب‌ها از ناشران معتبر با ضمانت اصالت و کیفیت چاپ</p>
             </div>
             <div className="bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100">
-              <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">💳</div>
+              <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg></div>
               <h3 className="font-bold text-gray-800 mb-2 text-lg">پرداخت امن و مطمئن</h3>
               <p className="text-gray-500 text-sm leading-relaxed">پرداخت امن از طریق درگاه‌های بانکی معتبر با پشتیبانی ۲۴ ساعته</p>
             </div>
