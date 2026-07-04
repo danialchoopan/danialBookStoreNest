@@ -1,142 +1,90 @@
-# 📚 BookNest - Multi-Vendor Bookstore Platform
+# 📚 BookNest — Multi-Vendor Bookstore Platform
 
-## Overview
-BookNest is a full-stack multi-vendor bookstore platform built with Next.js and NestJS. Users can browse, search, and order books. Vendors manage their products and earnings. Admins control the entire platform.
+> A full-stack multi-vendor bookstore with Persian RTL UI, built with Next.js + NestJS + SQLite (no Docker required).
 
-[README فارسی](README_FA.md)
+[📖 فارسی](README_FA.md) | [🚀 Setup Guide](docs/SETUP.html) | [📖 Documentation](docs/index.html)
 
-## Tech Stack
-- **Frontend:** Next.js 14 (App Router), React, Tailwind CSS, Zustand, TanStack Query
-- **Backend:** NestJS, PostgreSQL, Prisma ORM, Redis
-- **Infrastructure:** Docker, Docker Compose
+---
 
-## Features
-
-### Customer
-- JWT authentication with role-based access
-- Advanced book search with category and price filters
-- Multi-step checkout flow
-- Order history and tracking
-- Book reviews and ratings
-
-### Vendor
-- Dashboard with sales stats and revenue
-- Product management (CRUD books)
-- Order management with status workflow
-- Wallet with top-up and transaction history
-
-### Admin
-- Dashboard with charts and system overview
-- User management (activate/deactivate, role changes)
-- Vendor management (approve/reject, commission settings)
-- Category management with hierarchy
-- Full order and review visibility
-
-## Quick Start
-
-### Prerequisites
-- Node.js 18+
-- Docker & Docker Compose
-- pnpm (recommended)
-
-### Setup
+## Quick Start (No Docker)
 
 ```bash
-# 1. Clone and install
 git clone https://github.com/danialchoopan/danialBookStoreNest.git
 cd booknestjsshop
 
-# 2. Start Docker services (PostgreSQL + Redis)
-docker-compose up -d
+# Backend
+cd backend && npm install && npx prisma generate && npx prisma migrate dev --name init && npm run prisma:seed && npm run start:dev
 
-# 3. Setup Backend
-cd backend
-cp ../.env.example .env
-npm install
-npx prisma migrate dev
-npm run prisma:seed
-npm run start:dev
-
-# 4. Setup Frontend (new terminal)
-cd frontend
-npm install
-npm run dev
+# Frontend (new terminal)
+cd frontend && npm install && npm run dev
 ```
 
-### Access
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:4000/api
-- Swagger Docs: http://localhost:4000/api/docs
+Open **http://localhost:3000** — Login with `admin@booknest.ir` / `admin123`
 
-### Test Accounts
+**[Full Setup Guide →](docs/SETUP.html)**
 
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@booknest.ir | admin123 |
-| Vendor | seller1@booknest.ir | seller123 |
-| Customer | customer1@booknest.ir | customer123 |
+---
+
+## What's Included
+
+| Feature | Description |
+|---------|-------------|
+| 🔐 Auth | JWT login, 3 roles (Admin/Seller/Customer), demo accounts |
+| 📚 Books | 30 seeded books with ISBNs, search, filtering, pagination |
+| 🛒 Cart | Add/remove/update, multi-step checkout |
+| 📦 Orders | Status tracking timeline, 22 sample orders |
+| ⭐ Reviews | 25 reviews with ratings and Persian comments |
+| ❤️ Wishlist | Save books for later |
+| 🏪 Seller Dashboard | Stats, products, orders, wallet with transactions |
+| 👑 Admin Dashboard | Charts, user/vendor management, CSV reports |
+| 🔍 Search | Autocomplete with book + category suggestions |
+| 🌙 Dark Mode | Toggle with localStorage persistence |
+| 📱 Mobile | Responsive design with touch-friendly targets |
+| 📧 Email | Order confirmation + status update templates |
+| 🔌 WebSocket | Live order status updates |
+| 🛡️ Rate Limiting | API abuse protection |
+
+---
+
+## Tech Stack
+
+| Layer | Tech |
+|-------|------|
+| Frontend | Next.js 14, React, Tailwind CSS, Zustand, TanStack Query |
+| Backend | NestJS, Prisma ORM, Socket.io |
+| Database | SQLite (local dev) / PostgreSQL (production) |
+| Cache | Redis (optional) |
+
+---
 
 ## Project Structure
 
 ```
 booknestjsshop/
-├── backend/              # NestJS API
-│   ├── prisma/           # Schema & Seeds
-│   └── src/
-│       ├── common/       # Guards, Decorators, Filters, Interceptors, Redis
-│       ├── modules/      # Auth, Books, Cart, Orders, Seller, Admin, Reviews, Payments
-│       └── prisma/       # Prisma Service
-├── frontend/             # Next.js App (RTL)
-│   ├── app/              # Pages (Persian UI)
-│   ├── components/       # UI Components
-│   ├── lib/              # API Client, Stores, Utils
-│   └── types/            # TypeScript Types
+├── backend/          # NestJS API (port 4000) — 18 modules
+├── frontend/         # Next.js App (port 3000) — 16 pages, RTL
+├── docs/             # HTML documentation (10 pages)
 ├── docker-compose.yml
-├── README.md
-└── README_FA.md
+└── README.md
 ```
 
-## API Endpoints
+---
 
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| POST | /api/auth/register | Register new user | No |
-| POST | /api/auth/login | Login | No |
-| GET | /api/auth/profile | Get current user | Yes |
-| GET | /api/books | List books (search/filter) | No |
-| GET | /api/books/:id | Book detail | No |
-| POST | /api/books | Create book | Seller |
-| PUT | /api/books/:id | Update book | Seller |
-| DELETE | /api/books/:id | Delete book | Seller |
-| GET | /api/cart | Get cart | Yes |
-| POST | /api/cart/items | Add to cart | Yes |
-| PUT | /api/cart/items/:id | Update quantity | Yes |
-| DELETE | /api/cart/items/:id | Remove item | Yes |
-| POST | /api/orders | Create order | Yes |
-| GET | /api/orders | My orders | Yes |
-| GET | /api/reviews/book/:id | Book reviews | No |
-| POST | /api/reviews/book/:id | Add review | Yes |
-| GET | /api/seller/dashboard | Vendor dashboard | Seller |
-| GET | /api/seller/books | Vendor's books | Seller |
-| GET | /api/seller/orders | Vendor's orders | Seller |
-| POST | /api/payments/wallet/topup | Top up wallet | Seller |
-| GET | /api/admin/dashboard | Admin dashboard | Admin |
-| GET | /api/admin/sellers | List vendors | Admin |
-| PATCH | /api/admin/sellers/:id/approve | Approve vendor | Admin |
-| PATCH | /api/admin/sellers/:id/commission | Set commission | Admin |
-| GET | /api/users | List users | Admin |
+## Documentation
 
-## Environment Variables
+| Doc | Description |
+|-----|-------------|
+| [Setup Guide](docs/SETUP.html) | Step-by-step installation |
+| [Architecture](docs/ARCHITECTURE.html) | System design, data flow |
+| [Backend Guide](docs/BACKEND.html) | NestJS patterns, caching |
+| [Frontend Guide](docs/FRONTEND.html) | Next.js, RTL, state management |
+| [Database](docs/DATABASE.html) | Schema, relationships |
+| [API Reference](docs/API.html) | All endpoints documented |
+| [Swagger Guide](docs/SWAGGER.html) | How to test auth in Swagger |
+| [Development](docs/DEVELOPMENT.html) | Conventions, adding features |
+| [Deployment](docs/DEPLOYMENT.html) | Docker, production |
 
-See `.env.example` for required variables:
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| DATABASE_URL | PostgreSQL connection | Required |
-| REDIS_URL | Redis connection | Required |
-| JWT_SECRET | JWT signing secret | Required |
-| JWT_EXPIRES_IN | Token expiry | 7d |
-| PORT | Backend port | 4000 |
+---
 
 ## License
 

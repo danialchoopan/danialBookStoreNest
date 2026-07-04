@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Guide - BookNest Docs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 2rem; margin-bottom: 10px; }
+        h2 { font-size: 1.4rem; margin: 35px 0 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        h3 { font-size: 1.1rem; margin: 20px 0 8px; color: #334155; }
+        p { margin-bottom: 10px; color: #475569; }
+        a { color: #059669; text-decoration: none; }
+        pre { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; overflow-x: auto; margin: 12px 0; font-size: 0.85rem; line-height: 1.6; }
+        code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: #059669; font-family: 'SF Mono', Consolas, monospace; }
+        pre code { background: none; color: inherit; padding: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+        th { background: #f1f5f9; padding: 10px 14px; text-align: left; font-size: 0.85rem; }
+        td { padding: 8px 14px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; color: #475569; }
+        .nav { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 20px; margin-bottom: 30px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav a { font-weight: 500; font-size: 0.9rem; }
+        .step { background: white; border: 1px solid #e2e8f0; border-left: 4px solid #059669; border-radius: 12px; padding: 20px 20px 20px 24px; margin: 16px 0; }
+        .step-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #059669; color: white; border-radius: 50%; font-size: 0.8rem; font-weight: 700; margin-left: 8px; }
+        .tip { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-size: 0.9rem; color: #166534; }
+        .warning { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-size: 0.9rem; color: #92400e; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="nav">
+        <a href="index.html">← Home</a>
+        <a href="ARCHITECTURE.html">Architecture</a>
+        <a href="BACKEND.html">Backend</a>
+        <a href="FRONTEND.html">Frontend</a>
+        <a href="API.html">API</a>
+        <a href="DEVELOPMENT.html">Development</a>
+        <a href="DEPLOYMENT.html">Deployment</a>
+        <a href="SWAGGER.html">Swagger</a>
+    </nav>
+
+    <h1>🚀 Setup Guide</h1>
+    <p>Get BookNest running in under 5 minutes. No Docker required — uses SQLite.</p>
+
+    <h2>Prerequisites</h2>
+    <table>
+        <tr><th>Requirement</th><th>Version</th><th>Check Command</th></tr>
+        <tr><td>Node.js</td><td>18+</td><td><code>node --version</code></td></tr>
+        <tr><td>npm</td><td>9+</td><td><code>npm --version</code></td></tr>
+    </table>
+
+    <div class="warning">
+        <strong>Windows users:</strong> If <code>npm install</code> hangs, your ISP may be blocking npm. Try: <code>npm config set registry https://registry.npmjs.org/</code> or use a VPN.
+    </div>
+
+    <h2>Quick Setup (3 Commands)</h2>
+    <pre><code># 1. Clone
+git clone https://github.com/danialchoopan/danialBookStoreNest.git
+cd booknestjsshop
+
+# 2. Setup & run backend
+cd backend && npm install && npx prisma generate && npx prisma migrate dev --name init && npm run prisma:seed && npm run start:dev
+
+# 3. Setup & run frontend (new terminal)
+cd frontend && npm install && npm run dev</code></pre>
+
+    <h2>Step-by-Step Setup</h2>
+
+    <div class="step">
+        <p><span class="step-num">1</span><strong>Clone the repository</strong></p>
+        <pre><code>git clone https://github.com/danialchoopan/danialBookStoreNest.git
+cd booknestjsshop</code></pre>
+    </div>
+
+    <div class="step">
+        <p><span class="step-num">2</span><strong>Install backend dependencies</strong></p>
+        <pre><code>cd backend
+npm install</code></pre>
+    </div>
+
+    <div class="step">
+        <p><span class="step-num">3</span><strong>Setup database (SQLite — no Docker needed)</strong></p>
+        <pre><code>npx prisma generate       # Generate Prisma client
+npx prisma migrate dev --name init  # Create database
+npm run prisma:seed       # Seed with sample data</code></pre>
+        <div class="tip">
+            This creates <code>backend/prisma/dev.db</code> with 30 books, 25 reviews, 22 orders, and sample users.
+        </div>
+    </div>
+
+    <div class="step">
+        <p><span class="step-num">4</span><strong>Start the backend</strong></p>
+        <pre><code>npm run start:dev</code></pre>
+        <p>Backend running at: <code>http://localhost:4000</code></p>
+        <p>Swagger docs at: <code>http://localhost:4000/api/docs</code></p>
+    </div>
+
+    <div class="step">
+        <p><span class="step-num">5</span><strong>Open a new terminal and setup frontend</strong></p>
+        <pre><code>cd ../frontend
+npm install</code></pre>
+    </div>
+
+    <div class="step">
+        <p><span class="step-num">6</span><strong>Start the frontend</strong></p>
+        <pre><code>npm run dev</code></pre>
+        <p>Frontend running at: <code>http://localhost:3000</code></p>
+    </div>
+
+    <div class="step">
+        <p><span class="step-num">7</span><strong>Login and test!</strong></p>
+        <p>Go to <code>http://localhost:3000/login</code> and use the demo accounts below.</p>
+    </div>
+
+    <h2>Demo Accounts</h2>
+    <table>
+        <tr><th>Role</th><th>Email</th><th>Password</th><th>What You Can Do</th></tr>
+        <tr><td><strong>Admin</strong></td><td>admin@booknest.ir</td><td>admin123</td><td>Manage users, sellers, categories, view reports</td></tr>
+        <tr><td><strong>Seller</strong></td><td>seller1@booknest.ir</td><td>seller123</td><td>Add books, manage orders, view wallet</td></tr>
+        <tr><td><strong>Customer</strong></td><td>customer1@booknest.ir</td><td>customer123</td><td>Browse, cart, checkout, wishlist, reviews</td></tr>
+    </table>
+
+    <div class="tip">
+        <strong>Pro tip:</strong> On the login page, click the demo account buttons to auto-fill credentials!
+    </div>
+
+    <h2>What's Included (Seeded Data)</h2>
+    <table>
+        <tr><th>Data</th><th>Count</th></tr>
+        <tr><td>Categories</td><td>14 main + 5 subcategories</td></tr>
+        <tr><td>Books</td><td>30 with ISBNs, descriptions, Persian titles</td></tr>
+        <tr><td>Users</td><td>1 admin, 5 sellers, 8 customers</td></tr>
+        <tr><td>Orders</td><td>22 across all statuses</td></tr>
+        <tr><td>Reviews</td><td>25 with Persian comments</td></tr>
+        <tr><td>Wallet Transactions</td><td>15 credits/debits</td></tr>
+    </table>
+
+    <h2>Optional: Docker Setup</h2>
+    <p>If you prefer PostgreSQL + Redis instead of SQLite:</p>
+    <pre><code># Start PostgreSQL + Redis
+docker-compose up -d
+
+# Update backend/.env
+DATABASE_URL="postgresql://booknest:booknest_secret@localhost:5432/booknest_db"
+REDIS_URL="redis://localhost:6379"
+
+# Re-run migrations with PostgreSQL
+npx prisma migrate dev --name init</code></pre>
+
+    <h2>Troubleshooting</h2>
+    <table>
+        <tr><th>Problem</th><th>Solution</th></tr>
+        <tr><td><code>npm install</code> hangs</td><td>Switch registry: <code>npm config set registry https://registry.npmjs.org/</code></td></tr>
+        <tr><td><code>prisma generate</code> fails</td><td>Delete <code>node_modules</code> and <code>package-lock.json</code>, then <code>npm install</code></td></tr>
+        <tr><td>Port 4000 in use</td><td>Change <code>PORT</code> in <code>backend/.env</code></td></tr>
+        <tr><td>Port 3000 in use</td><td>Next.js will auto-use 3001</td></tr>
+        <tr><td>Frontend can't connect to API</td><td>Check <code>frontend/.env.local</code> has <code>NEXT_PUBLIC_API_URL=http://localhost:4000/api</code></td></tr>
+        <tr><td>Database errors</td><td>Delete <code>backend/prisma/dev.db</code> and re-run <code>npx prisma migrate dev && npm run prisma:seed</code></td></tr>
+    </table>
+
+    <h2>Project Structure</h2>
+    <pre><code>booknestjsshop/
+├── backend/              # NestJS API (port 4000)
+│   ├── prisma/           # schema.prisma + seed.ts + dev.db
+│   ├── uploads/          # Uploaded book images
+│   └── src/
+│       ├── common/       # Guards, WebSocket, Redis, Decorators
+│       └── modules/      # 18 feature modules
+├── frontend/             # Next.js App (port 3000)
+│   ├── app/              # 16 pages (RTL Persian UI)
+│   ├── components/       # UI components
+│   └── lib/              # API client, stores, utils
+├── docs/                 # HTML documentation (9 pages)
+├── docker-compose.yml    # Optional PostgreSQL + Redis
+└── README.md</code></pre>
+
+    <h2>Next Steps</h2>
+    <ul style="padding-right: 20px; color: #475569;">
+        <li>Read the <a href="API.html">API Reference</a> for all endpoints</li>
+        <li>Check <a href="SWAGGER.html">Swagger Auth Testing</a> to test with Swagger UI</li>
+        <li>Read <a href="DEVELOPMENT.html">Development Guide</a> for coding conventions</li>
+        <li>Read <a href="DEPLOYMENT.html">Deployment Guide</a> for production setup</li>
+    </ul>
+</div>
+</body>
+</html>
