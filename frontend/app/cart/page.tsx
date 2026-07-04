@@ -39,7 +39,7 @@ export default function CartPage() {
   if (!isAuthenticated) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
-        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center text-4xl mb-4">🔒</div>
+        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4"><svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg></div>
         <h1 className="text-xl font-bold text-gray-800 mb-2">ورود لازم است</h1>
         <p className="text-gray-500 mb-6">برای مشاهده سبد خرید ابتدا وارد شوید</p>
         <Link href="/login" className="bg-primary-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-primary-700">
@@ -52,7 +52,7 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
-        <div className="w-28 h-28 bg-gray-100 rounded-full flex items-center justify-center text-6xl mb-5">🛒</div>
+        <div className="w-28 h-28 bg-gray-100 rounded-full flex items-center justify-center mb-5"><svg className="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg></div>
         <h1 className="text-2xl font-bold text-gray-800 mb-2">سبد خرید شما خالی است</h1>
         <p className="text-gray-500 mb-8">کتاب مورد علاقه خود را پیدا کنید!</p>
         <Link
@@ -124,8 +124,8 @@ export default function CartPage() {
                   >
                     {/* Image */}
                     <Link href={`/books/${item.book.id}`} className="shrink-0">
-                      <div className="w-24 h-32 bg-gradient-to-br from-primary-50 to-white rounded-xl flex items-center justify-center text-3xl text-gray-300 border border-gray-100 hover:border-primary-200 transition-colors">
-                        📖
+                      <div className="w-24 h-32 bg-gradient-to-br from-primary-50 to-white rounded-xl flex items-center justify-center border border-gray-100 hover:border-primary-200 transition-colors">
+                        <svg className="w-8 h-8 text-primary-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
                       </div>
                     </Link>
 
@@ -264,15 +264,15 @@ export default function CartPage() {
             {/* Trust Badges */}
             <div className="mt-6 pt-5 border-t border-gray-100 grid grid-cols-3 gap-3">
               <div className="text-center">
-                <div className="text-lg mb-1">🔒</div>
+                <svg className="w-5 h-5 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
                 <p className="text-[10px] text-gray-500">پرداخت امن</p>
               </div>
               <div className="text-center">
-                <div className="text-lg mb-1">🚚</div>
+                <svg className="w-5 h-5 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.144a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" /></svg>
                 <p className="text-[10px] text-gray-500">ارسال رایگان</p>
               </div>
               <div className="text-center">
-                <div className="text-lg mb-1">✅</div>
+                <svg className="w-5 h-5 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <p className="text-[10px] text-gray-500">ضمانت بازگشت</p>
               </div>
             </div>
