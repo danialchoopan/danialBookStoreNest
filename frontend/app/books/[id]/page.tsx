@@ -81,7 +81,7 @@ export default function BookDetailPage() {
   if (!book) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
-        <div className="text-6xl mb-4">📚</div>
+        <svg className="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
         <h1 className="text-xl font-bold text-gray-800 mb-2">کتاب یافت نشد</h1>
         <Link href="/books" className="text-primary-600 hover:text-primary-700 mt-4">
           بازگشت به فروشگاه
@@ -117,7 +117,7 @@ export default function BookDetailPage() {
         {/* Book Cover */}
         <div className="w-full lg:w-96 shrink-0">
           <div className="relative bg-gradient-to-br from-primary-50 via-white to-primary-50 rounded-2xl h-[28rem] flex items-center justify-center border border-gray-100 shadow-sm overflow-hidden group">
-            <span className="text-[8rem] opacity-30 group-hover:scale-110 transition-transform duration-500">📖</span>
+            <svg className="w-32 h-32 text-primary-200 opacity-40 group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
             {discount && (
               <div className="absolute top-4 right-4">
                 <span className="bg-red-500 text-white text-sm font-bold px-3 py-1.5 rounded-xl shadow-lg">
@@ -320,7 +320,7 @@ export default function BookDetailPage() {
                   className="bg-white border border-gray-100 rounded-2xl overflow-hidden hover:shadow-lg transition-all group"
                 >
                   <div className="h-40 bg-gradient-to-br from-primary-50 to-white flex items-center justify-center">
-                    <span className="text-5xl opacity-20 group-hover:scale-110 transition-transform">📖</span>
+                    <svg className="w-10 h-10 text-primary-200 opacity-50 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
                   </div>
                   <div className="p-4">
                     <h3 className="font-bold text-gray-800 line-clamp-1 group-hover:text-primary-600 transition-colors text-sm">
