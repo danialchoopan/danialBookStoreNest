@@ -8,7 +8,9 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 bg-primary-600 rounded-xl flex items-center justify-center text-white">📚</div>
+              <div className="w-9 h-9 bg-primary-600 rounded-xl flex items-center justify-center text-white">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+              </div>
               <span className="text-xl font-bold text-white">کتاب<span className="text-primary-400">نست</span></span>
             </div>
             <p className="text-sm leading-relaxed text-gray-400">
@@ -31,8 +33,8 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-bold mb-4">پشتیبانی</h4>
             <ul className="space-y-2.5 text-sm">
-              <li><span className="text-gray-400">📞 ۰۲۱-۱۲۳۴۵۶۷۸</span></li>
-              <li><span className="text-gray-400">📧 info@booknest.ir</span></li>
+              <li><span className="text-gray-400">۰۲۱-۱۲۳۴۵۶۷۸</span></li>
+              <li><span className="text-gray-400">info@booknest.ir</span></li>
               <li><Link href="/faq" className="hover:text-white transition-colors">سوالات متداول</Link></li>
               <li><Link href="/terms" className="hover:text-white transition-colors">شرایط استفاده</Link></li>
             </ul>

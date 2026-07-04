@@ -2,16 +2,16 @@ import Link from 'next/link';
 import BookGrid from '@/components/books/BookGrid';
 
 const categories = [
-  { name: 'ادبیات فارسی', slug: 'persian-literature', emoji: '📖', color: 'from-amber-50 to-orange-50 border-amber-200' },
-  { name: 'رمان', slug: 'novel', emoji: '📕', color: 'from-rose-50 to-pink-50 border-rose-200' },
-  { name: 'تاریخ', slug: 'history', emoji: '🏛️', color: 'from-amber-50 to-yellow-50 border-amber-200' },
-  { name: 'علمی', slug: 'science', emoji: '🔬', color: 'from-blue-50 to-cyan-50 border-blue-200' },
-  { name: 'کودک', slug: 'children', emoji: '🧒', color: 'from-green-50 to-emerald-50 border-green-200' },
-  { name: 'روانشناسی', slug: 'psychology', emoji: '🧠', color: 'from-purple-50 to-violet-50 border-purple-200' },
-  { name: 'فلسفه', slug: 'philosophy', emoji: '💭', color: 'from-indigo-50 to-blue-50 border-indigo-200' },
-  { name: 'مذهبی', slug: 'religious', emoji: '🕌', color: 'from-teal-50 to-cyan-50 border-teal-200' },
-  { name: 'اقتصاد', slug: 'economics', emoji: '📊', color: 'from-emerald-50 to-green-50 border-emerald-200' },
-  { name: 'هنر', slug: 'art', emoji: '🎨', color: 'from-fuchsia-50 to-pink-50 border-fuchsia-200' },
+  { name: 'ادبیات فارسی', slug: 'persian-literature', color: 'from-amber-50 to-orange-50 border-amber-200', iconColor: 'text-amber-600' },
+  { name: 'رمان', slug: 'novel', color: 'from-rose-50 to-pink-50 border-rose-200', iconColor: 'text-rose-600' },
+  { name: 'تاریخ', slug: 'history', color: 'from-amber-50 to-yellow-50 border-amber-200', iconColor: 'text-amber-700' },
+  { name: 'علمی', slug: 'science', color: 'from-blue-50 to-cyan-50 border-blue-200', iconColor: 'text-blue-600' },
+  { name: 'کودک', slug: 'children', color: 'from-green-50 to-emerald-50 border-green-200', iconColor: 'text-green-600' },
+  { name: 'روانشناسی', slug: 'psychology', color: 'from-purple-50 to-violet-50 border-purple-200', iconColor: 'text-purple-600' },
+  { name: 'فلسفه', slug: 'philosophy', color: 'from-indigo-50 to-blue-50 border-indigo-200', iconColor: 'text-indigo-600' },
+  { name: 'مذهبی', slug: 'religious', color: 'from-teal-50 to-cyan-50 border-teal-200', iconColor: 'text-teal-600' },
+  { name: 'اقتصاد', slug: 'economics', color: 'from-emerald-50 to-green-50 border-emerald-200', iconColor: 'text-emerald-600' },
+  { name: 'هنر', slug: 'art', color: 'from-fuchsia-50 to-pink-50 border-fuchsia-200', iconColor: 'text-fuchsia-600' },
 ];
 
 export default function HomePage() {
@@ -20,8 +20,12 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-l from-primary-600 via-primary-700 to-primary-800">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 right-10 text-9xl">📚</div>
-          <div className="absolute bottom-10 left-10 text-9xl">📖</div>
+          <div className="absolute top-10 right-10">
+            <svg className="w-64 h-64 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+          </div>
+          <div className="absolute bottom-10 left-10">
+            <svg className="w-48 h-48 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+          </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 py-16 md:py-24 relative z-10">
           <div className="max-w-2xl">
@@ -59,14 +63,14 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center text-xl">📚</div>
+              <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center"><svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg></div>
               <div>
                 <div className="font-bold text-gray-800">+۱,۰۰۰</div>
                 <div className="text-sm text-gray-500">کتاب موجود</div>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-xl">🏪</div>
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center"><svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z" /></svg></div>
               <div>
                 <div className="font-bold text-gray-800">+۵۰</div>
                 <div className="text-sm text-gray-500">فروشنده فعال</div>
