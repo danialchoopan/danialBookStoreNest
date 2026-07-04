@@ -76,7 +76,7 @@ export default function ImageUpload({ images, onImagesChange, disabled }: Props)
           </div>
         ) : (
           <>
-            <div className="text-3xl mb-2">📸</div>
+            <div className="text-3xl mb-2"><svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.974-1.802-2.168a47.865 47.865 0 00-1.134-.07 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232-.312c-1.226 0-2.026.136-2.026.664v.387c0 .374.042.743.118 1.1l.598 2.391a2.25 2.25 0 002.196 1.834h4.082a2.25 2.25 0 002.196-1.834l.598-2.391c.076-.36.118-.729.118-1.1V12.6c0-1.226-.794-2.026-2.026-2.026-.473 0-.926.037-1.359.109l-.148.045z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" /></svg></div>
             <p className="text-sm text-gray-600">
               کلیک کنید یا فایل‌ها را بکشید
             </p>
@@ -103,7 +103,7 @@ export default function ImageUpload({ images, onImagesChange, disabled }: Props)
             <div key={idx} className="relative group">
               <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden border border-gray-200">
                 <div className="w-full h-full flex items-center justify-center text-2xl text-gray-300">
-                  📖
+                  
                 </div>
               </div>
               {!disabled && (

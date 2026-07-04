@@ -205,7 +205,7 @@ export default function CartPage() {
               {items.map((item) => (
                 <div key={item.id} className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center text-sm shrink-0">
-                    📖
+                    
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-gray-700 line-clamp-1">{item.book.title}</p>

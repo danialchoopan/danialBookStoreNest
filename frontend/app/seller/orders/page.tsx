@@ -77,7 +77,7 @@ export default function SellerOrdersPage() {
         </div>
       ) : !data?.data?.length ? (
         <div className="text-center py-16">
-          <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center text-5xl mx-auto mb-5">📦</div>
+          <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center text-5xl mx-auto mb-5"></div>
           <h2 className="text-xl font-bold text-gray-800 mb-2">هنوز سفارشی ثبت نشده</h2>
           <p className="text-gray-500">وقتی مشتریان سفارش دهند، اینجا نمایش داده می‌شود.</p>
         </div>
@@ -110,7 +110,7 @@ export default function SellerOrdersPage() {
                 <div className="px-6 py-4">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-16 bg-primary-50 rounded-lg flex items-center justify-center text-xl shrink-0">
-                      📖
+                      
                     </div>
                     <div className="flex-1">
                       <p className="font-bold text-gray-800">{item.book.title}</p>

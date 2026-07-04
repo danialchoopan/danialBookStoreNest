@@ -37,7 +37,7 @@ export default function ReviewForm({ bookId }: Props) {
   if (!isAuthenticated) {
     return (
       <div className="text-center py-8">
-        <div className="text-4xl mb-3">🔒</div>
+        <div className="mb-3"><svg className="w-10 h-10 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg></div>
         <p className="text-gray-500 mb-3">برای ثبت نظر ابتدا وارد شوید</p>
         <a href="/login" className="text-primary-600 hover:text-primary-700 font-medium text-sm">
           ورود به حساب ←

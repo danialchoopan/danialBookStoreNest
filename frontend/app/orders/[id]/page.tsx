@@ -44,7 +44,7 @@ export default function OrderDetailPage() {
   if (!order) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
-        <div className="text-5xl mb-4">📦</div>
+        <div className="text-5xl mb-4"></div>
         <h1 className="text-xl font-bold text-gray-800 mb-2">سفارش یافت نشد</h1>
         <Link href="/orders" className="text-primary-600 hover:text-primary-700 mt-4">
           بازگشت به سفارشات
@@ -88,7 +88,7 @@ export default function OrderDetailPage() {
               {order.items.map((item: any) => (
                 <div key={item.id} className="flex items-center gap-4 py-3 border-b border-gray-50 last:border-0">
                   <div className="w-12 h-16 bg-primary-50 rounded-lg flex items-center justify-center text-xl shrink-0">
-                    📖
+                    
                   </div>
                   <div className="flex-1 min-w-0">
                     <Link href={`/books/${item.bookId}`} className="font-medium text-gray-800 hover:text-primary-600 line-clamp-1 text-sm">

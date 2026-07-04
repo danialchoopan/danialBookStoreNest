@@ -15,17 +15,17 @@ export default function BooksPage() {
   const [page, setPage] = useState(1);
 
   const categories = [
-    { name: 'همه کتاب‌ها', slug: '', emoji: '📚' },
-    { name: 'ادبیات فارسی', slug: 'persian-literature', emoji: '📖' },
-    { name: 'رمان', slug: 'novel', emoji: '📕' },
-    { name: 'تاریخ', slug: 'history', emoji: '🏛️' },
-    { name: 'فلسفه', slug: 'philosophy', emoji: '💭' },
-    { name: 'علمی', slug: 'science', emoji: '🔬' },
-    { name: 'کودک و نوجوان', slug: 'children', emoji: '🧒' },
-    { name: 'روانشناسی', slug: 'psychology', emoji: '🧠' },
-    { name: 'مذهبی', slug: 'religious', emoji: '🕌' },
-    { name: 'اقتصاد', slug: 'economics', emoji: '📊' },
-    { name: 'هنر', slug: 'art', emoji: '🎨' },
+    { name: 'همه کتاب‌ها', slug: '' },
+    { name: 'ادبیات فارسی', slug: 'persian-literature' },
+    { name: 'رمان', slug: 'novel' },
+    { name: 'تاریخ', slug: 'history' },
+    { name: 'فلسفه', slug: 'philosophy' },
+    { name: 'علمی', slug: 'science' },
+    { name: 'کودک و نوجوان', slug: 'children' },
+    { name: 'روانشناسی', slug: 'psychology' },
+    { name: 'مذهبی', slug: 'religious' },
+    { name: 'اقتصاد', slug: 'economics' },
+    { name: 'هنر', slug: 'art' },
   ];
 
   const activeCategory = categories.find(c => c.slug === category);

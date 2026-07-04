@@ -7,12 +7,12 @@ import { useAuthStore } from '@/lib/store';
 
 const statusConfig: Record<string, { label: string; color: string; icon: string }> = {
   PENDING: { label: 'در انتظار پرداخت', color: 'bg-yellow-100 text-yellow-700 border-yellow-200', icon: '⏳' },
-  PAID: { label: 'پرداخت شده', color: 'bg-blue-100 text-blue-700 border-blue-200', icon: '💳' },
-  PROCESSING: { label: 'در حال پردازش', color: 'bg-purple-100 text-purple-700 border-purple-200', icon: '⚙️' },
-  SHIPPED: { label: 'ارسال شده', color: 'bg-indigo-100 text-indigo-700 border-indigo-200', icon: '🚚' },
+  PAID: { label: 'پرداخت شده', color: 'bg-blue-100 text-blue-700 border-blue-200', icon: '<svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>' },
+  PROCESSING: { label: 'در حال پردازش', color: 'bg-purple-100 text-purple-700 border-purple-200', icon: '<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.535.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828c-.424-.35-.535-.954-.26-1.43l1.298-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>' },
+  SHIPPED: { label: 'ارسال شده', color: 'bg-indigo-100 text-indigo-700 border-indigo-200', icon: '<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.144a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" /></svg>' },
   DELIVERED: { label: 'تحویل شده', color: 'bg-green-100 text-green-700 border-green-200', icon: '✅' },
-  CANCELLED: { label: 'لغو شده', color: 'bg-red-100 text-red-700 border-red-200', icon: '❌' },
-  REFUNDED: { label: 'بازپرداخت شده', color: 'bg-gray-100 text-gray-700 border-gray-200', icon: '↩️' },
+  CANCELLED: { label: 'لغو شده', color: 'bg-red-100 text-red-700 border-red-200', icon: '<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>' },
+  REFUNDED: { label: 'بازپرداخت شده', color: 'bg-gray-100 text-gray-700 border-gray-200', icon: '<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" /></svg>' },
 };
 
 export default function OrdersPage() {
@@ -34,7 +34,7 @@ export default function OrdersPage() {
   if (!isAuthenticated) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
-        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center text-4xl mb-4">🔒</div>
+        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4"><svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg></div>
         <h1 className="text-xl font-bold text-gray-800 mb-2">ورود لازم است</h1>
         <p className="text-gray-500 mb-6">برای مشاهده سفارشات ابتدا وارد شوید</p>
         <Link href="/login" className="bg-primary-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-primary-700">
@@ -68,7 +68,7 @@ export default function OrdersPage() {
         </div>
       ) : !data?.data?.length ? (
         <div className="text-center py-16">
-          <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center text-5xl mx-auto mb-5">📦</div>
+          <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center text-5xl mx-auto mb-5"></div>
           <h2 className="text-xl font-bold text-gray-800 mb-2">هنوز سفارشی ثبت نکرده‌اید</h2>
           <p className="text-gray-500 mb-6">اولین سفارش خود را ثبت کنید!</p>
           <Link
@@ -117,7 +117,7 @@ export default function OrdersPage() {
                     {order.items.map((item: any) => (
                       <div key={item.id} className="flex items-center gap-4">
                         <div className="w-12 h-16 bg-primary-50 rounded-lg flex items-center justify-center text-xl shrink-0">
-                          📖
+                          
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-gray-800 text-sm line-clamp-1">{item.book.title}</p>

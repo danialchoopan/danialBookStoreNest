@@ -52,7 +52,7 @@ export default function BookGrid({ search, category, page = 1, limit = 12 }: Pro
   if (error) {
     return (
       <div className="text-center py-16 bg-white border border-gray-100 rounded-2xl">
-        <div className="text-4xl mb-3">⚠️</div>
+        <div className="text-4xl mb-3"><svg className="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg></div>
         <p className="text-gray-500 mb-4">خطا در بارگذاری کتاب‌ها</p>
         <p className="text-sm text-gray-400">لطفاً دوباره تلاش کنید</p>
       </div>

@@ -51,7 +51,7 @@ export default function CheckoutPage() {
   if (!isAuthenticated) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
-        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center text-4xl mb-4">🔒</div>
+        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4"><svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg></div>
         <h1 className="text-xl font-bold text-gray-800 mb-2">ورود لازم است</h1>
         <p className="text-gray-500 mb-6">برای تسویه حساب ابتدا وارد شوید</p>
         <Link href="/login" className="bg-primary-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-primary-700">
@@ -64,7 +64,7 @@ export default function CheckoutPage() {
   if (items.length === 0 && step !== 'success') {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
-        <div className="text-6xl mb-4">🛒</div>
+        <div className="mb-4"><svg className="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg></div>
         <h1 className="text-xl font-bold text-gray-800 mb-2">سبد خرید خالی است</h1>
         <p className="text-gray-500 mb-6">ابتدا کتابی به سبد خرید اضافه کنید.</p>
         <Link href="/books" className="bg-primary-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-primary-700">
@@ -309,7 +309,7 @@ export default function CheckoutPage() {
                   {items.map((item) => (
                     <div key={item.id} className="flex items-center gap-4 py-3 border-b border-gray-50 last:border-0">
                       <div className="w-12 h-16 bg-primary-50 rounded-lg flex items-center justify-center text-xl shrink-0">
-                        📖
+                        
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-gray-800 text-sm line-clamp-1">{item.book.title}</p>
@@ -366,7 +366,7 @@ export default function CheckoutPage() {
               {items.map((item) => (
                 <div key={item.id} className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center text-sm shrink-0">
-                    📖
+                    
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-gray-700 line-clamp-1">{item.book.title}</p>

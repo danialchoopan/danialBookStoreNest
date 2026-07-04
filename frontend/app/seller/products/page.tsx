@@ -94,7 +94,7 @@ export default function SellerProductsPage() {
         </div>
       ) : !data?.data?.length ? (
         <div className="text-center py-16">
-          <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center text-5xl mx-auto mb-5">📚</div>
+          <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center text-5xl mx-auto mb-5"></div>
           <h2 className="text-xl font-bold text-gray-800 mb-2">هنوز کتابی اضافه نکرده‌اید</h2>
           <p className="text-gray-500 mb-6">اولین کتاب خود را به فروشگاه اضافه کنید!</p>
           <button
@@ -123,7 +123,7 @@ export default function SellerProductsPage() {
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-16 bg-primary-50 rounded-lg flex items-center justify-center text-lg shrink-0">
-                          📖
+                          
                         </div>
                         <div>
                           <Link href={`/books/${book.id}`} className="font-bold text-gray-800 hover:text-primary-600 line-clamp-1">

@@ -58,21 +58,21 @@ export default function SellerWalletPage() {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-white border border-gray-200 rounded-xl p-6">
-          <div className="text-3xl mb-2">💰</div>
+          <div className="text-3xl mb-2"></div>
           <h3 className="text-2xl font-bold text-primary-600">
             {summaryLoading ? '...' : formatPrice(summary.balance)}
           </h3>
           <p className="text-sm text-gray-500">موجودی فعلی</p>
         </div>
         <div className="bg-white border border-gray-200 rounded-xl p-6">
-          <div className="text-3xl mb-2">📈</div>
+          <div className="text-3xl mb-2"><svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" /></svg></div>
           <h3 className="text-2xl font-bold text-green-600">
             {summaryLoading ? '...' : formatPrice(summary.totalCredit)}
           </h3>
           <p className="text-sm text-gray-500">کل واریزی‌ها</p>
         </div>
         <div className="bg-white border border-gray-200 rounded-xl p-6">
-          <div className="text-3xl mb-2">📉</div>
+          <div className="text-3xl mb-2"><svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.25 6L9 12.75l4.286-4.286a11.948 11.948 0 014.306 6.43l.776 2.898m0 0l3.182-5.511m-3.182 5.51l-5.511-3.181" /></svg></div>
           <h3 className="text-2xl font-bold text-red-600">
             {summaryLoading ? '...' : formatPrice(summary.totalDebit)}
           </h3>
