@@ -17,6 +17,7 @@ export default function BookDetailPage() {
   const { addItem } = useCartStore();
   const { isAuthenticated } = useAuthStore();
   const [quantity, setQuantity] = useState(1);
+  const [selectedFormat, setSelectedFormat] = useState<'PHYSICAL' | 'DIGITAL'>('PHYSICAL');
 
   const { data: book, isLoading } = useQuery({
     queryKey: ['book', params.id],
@@ -43,8 +44,8 @@ export default function BookDetailPage() {
       return;
     }
     try {
-      await addItem(book.id, quantity);
-      toast.success(`${quantity} نسخه به سبد خرید اضافه شد`);
+      await addItem(book.id, selectedFormat === 'DIGITAL' ? 1 : quantity);
+      toast.success(selectedFormat === 'DIGITAL' ? 'کتاب الکترونیکی به سبد اضافه شد' : `${quantity} نسخه به سبد خرید اضافه شد`);
     } catch {
       toast.error('خطا در افزودن به سبد خرید');
     }
@@ -57,6 +58,10 @@ export default function BookDetailPage() {
   const discount = book?.comparePrice && book.comparePrice > book.price
     ? Math.round((1 - book.price / book.comparePrice) * 100)
     : null;
+
+  const hasPhysical = book?.format === 'PHYSICAL' || book?.format === 'BOTH';
+  const hasDigital = book?.format === 'DIGITAL' || book?.format === 'BOTH';
+  const activePrice = selectedFormat === 'DIGITAL' && book?.ebookPrice ? book.ebookPrice : book?.price;
 
   if (isLoading) {
     return (
@@ -188,70 +193,99 @@ export default function BookDetailPage() {
 
           {/* Price Card */}
           <div className="bg-white border border-gray-100 rounded-2xl p-6 mb-6 shadow-sm">
+            {/* Format Tabs */}
+            {hasPhysical && hasDigital && (
+              <div className="flex gap-2 mb-4">
+                <button
+                  onClick={() => setSelectedFormat('PHYSICAL')}
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                    selectedFormat === 'PHYSICAL' ? 'bg-primary-600 text-white' : 'bg-gray-50 text-gray-600 border border-gray-200'
+                  }`}
+                >
+                  نسخه فیزیکی
+                </button>
+                <button
+                  onClick={() => setSelectedFormat('DIGITAL')}
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                    selectedFormat === 'DIGITAL' ? 'bg-emerald-600 text-white' : 'bg-gray-50 text-gray-600 border border-gray-200'
+                  }`}
+                >
+                  نسخه الکترونیکی (PDF)
+                </button>
+              </div>
+            )}
+
+            {/* Price */}
             <div className="flex items-end gap-4 mb-4">
               <div>
-                <span className="text-4xl font-bold text-primary-600">
-                  {formatPrice(book.price)}
+                <span className={`text-4xl font-bold ${selectedFormat === 'DIGITAL' ? 'text-emerald-600' : 'text-primary-600'}`}>
+                  {activePrice ? formatPrice(activePrice) : formatPrice(book.price)}
                 </span>
                 <span className="text-sm text-gray-400 mr-2">تومان</span>
               </div>
-              {discount && (
+              {selectedFormat === 'PHYSICAL' && discount && (
                 <div className="flex items-center gap-2">
-                  <span className="text-lg text-gray-400 line-through">
-                    {formatPrice(book.comparePrice!)}
-                  </span>
-                  <span className="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded-lg">
-                    {discount}-
-                  </span>
+                  <span className="text-lg text-gray-400 line-through">{formatPrice(book.comparePrice!)}</span>
+                  <span className="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded-lg">{discount}-</span>
+                </div>
+              )}
+              {selectedFormat === 'DIGITAL' && book.ebookPrice && book.comparePrice && book.comparePrice > book.ebookPrice && (
+                <div className="flex items-center gap-2">
+                  <span className="bg-emerald-100 text-emerald-600 text-xs font-bold px-2 py-1 rounded-lg">ارزان‌تر از چاپی</span>
                 </div>
               )}
             </div>
 
-            {/* Stock */}
-            <div className="flex items-center gap-2 mb-5">
-              {book.stock > 0 ? (
-                <>
-                  <span className="w-2 h-2 bg-green-500 rounded-full" />
-                  <span className="text-green-600 text-sm font-medium">
-                    موجود در انبار ({book.stock} عدد)
+            {/* Digital Info */}
+            {selectedFormat === 'DIGITAL' && (
+              <div className="flex items-center gap-2 mb-5">
+                <span className="w-2 h-2 bg-emerald-500 rounded-full" />
+                <span className="text-emerald-600 text-sm font-medium">آنی قابل دانلود</span>
+                {book.ebookFileSize && (
+                  <span className="text-gray-400 text-xs mr-2">
+                    ({(book.ebookFileSize / (1024 * 1024)).toFixed(1)} MB)
                   </span>
-                </>
-              ) : (
-                <>
-                  <span className="w-2 h-2 bg-red-500 rounded-full" />
-                  <span className="text-red-500 text-sm font-medium">ناموجود</span>
-                </>
-              )}
-            </div>
+                )}
+              </div>
+            )}
+
+            {/* Physical Stock */}
+            {selectedFormat === 'PHYSICAL' && (
+              <div className="flex items-center gap-2 mb-5">
+                {book.stock != null && book.stock > 0 ? (
+                  <>
+                    <span className="w-2 h-2 bg-green-500 rounded-full" />
+                    <span className="text-green-600 text-sm font-medium">موجود در انبار ({book.stock} عدد)</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="w-2 h-2 bg-red-500 rounded-full" />
+                    <span className="text-red-500 text-sm font-medium">ناموجود</span>
+                  </>
+                )}
+              </div>
+            )}
 
             {/* Quantity & Add to Cart */}
-            {book.stock > 0 && (
+            {selectedFormat === 'PHYSICAL' && (book.stock == null || book.stock > 0) && (
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-1 bg-gray-50 rounded-xl border border-gray-200">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-xl transition-colors text-lg"
-                  >
-                    -
-                  </button>
+                  <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-xl transition-colors text-lg">-</button>
                   <span className="w-12 text-center font-bold text-gray-800 text-lg">{quantity}</span>
-                  <button
-                    onClick={() => setQuantity(Math.min(book.stock, quantity + 1))}
-                    className="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-xl transition-colors text-lg"
-                  >
-                    +
-                  </button>
+                  <button onClick={() => setQuantity(Math.min(book.stock || 99, quantity + 1))} className="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-xl transition-colors text-lg">+</button>
                 </div>
-                <button
-                  onClick={handleAddToCart}
-                  className="flex-1 bg-primary-600 text-white py-3.5 rounded-xl font-bold hover:bg-primary-700 transition-all shadow-sm shadow-primary-200 flex items-center justify-center gap-2"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
+                <button onClick={handleAddToCart} className="flex-1 bg-primary-600 text-white py-3.5 rounded-xl font-bold hover:bg-primary-700 transition-all shadow-sm shadow-primary-200 flex items-center justify-center gap-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                   افزودن به سبد خرید
                 </button>
               </div>
+            )}
+
+            {selectedFormat === 'DIGITAL' && (
+              <button onClick={handleAddToCart} className="w-full bg-emerald-600 text-white py-3.5 rounded-xl font-bold hover:bg-emerald-700 transition-all shadow-sm flex items-center justify-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                خرید و دانلود فوری
+              </button>
             )}
 
             {/* Wishlist Button */}

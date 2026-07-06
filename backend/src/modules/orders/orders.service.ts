@@ -17,7 +17,7 @@ export class OrdersService {
         items: {
           include: {
             book: {
-              select: { id: true, price: true, stock: true, sellerId: true, title: true },
+              select: { id: true, price: true, stock: true, sellerId: true, title: true, format: true, ebookPrice: true },
             },
           },
         },
@@ -28,55 +28,78 @@ export class OrdersService {
       throw new BadRequestException('سبد خرید خالی است');
     }
 
+    // Check stock only for physical items
     for (const item of cart.items) {
-      if (item.book.stock < item.quantity) {
+      if (item.book.format !== 'DIGITAL' && item.book.stock != null && item.book.stock < item.quantity) {
         throw new BadRequestException(`موجودی کتاب "${item.book.title}" کافی نیست`);
       }
     }
 
-    const totalAmount = cart.items.reduce(
-      (sum, item) => sum + Number(item.book.price) * item.quantity,
-      0,
-    );
+    // Check if all items are digital (shipping not needed)
+    const allDigital = cart.items.every((item) => item.book.format === 'DIGITAL');
+    if (!allDigital && !dto.shippingAddress) {
+      throw new BadRequestException('آدرس ارسال برای کتاب‌های فیزیکی الزامی است');
+    }
+
+    // Use ebookPrice for digital items
+    const totalAmount = cart.items.reduce((sum, item) => {
+      const unitPrice = item.book.format === 'DIGITAL' && item.book.ebookPrice
+        ? Number(item.book.ebookPrice)
+        : Number(item.book.price);
+      return sum + unitPrice * item.quantity;
+    }, 0);
 
     const order = await this.prisma.$transaction(async (tx) => {
       const newOrder = await tx.order.create({
         data: {
           userId,
           totalAmount,
-          shippingAddress: JSON.stringify(dto.shippingAddress || {}),
+          shippingAddress: dto.shippingAddress ? JSON.stringify(dto.shippingAddress) : null,
           note: dto.note,
           items: {
-            create: cart.items.map((item) => ({
-              bookId: item.bookId,
-              sellerId: item.book.sellerId,
-              quantity: item.quantity,
-              unitPrice: item.book.price,
-              totalPrice: Number(item.book.price) * item.quantity,
-            })),
+            create: cart.items.map((item) => {
+              const unitPrice = item.book.format === 'DIGITAL' && item.book.ebookPrice
+                ? Number(item.book.ebookPrice)
+                : Number(item.book.price);
+              return {
+                bookId: item.bookId,
+                sellerId: item.book.sellerId,
+                quantity: item.quantity,
+                unitPrice,
+                totalPrice: unitPrice * item.quantity,
+              };
+            }),
           },
         },
         include: { items: true },
       });
 
-      // Create initial status history
       await tx.orderStatusHistory.create({
-        data: {
-          orderId: newOrder.id,
-          status: 'PENDING',
-          note: 'سفارش ثبت شد',
-        },
+        data: { orderId: newOrder.id, status: 'PENDING', note: 'سفارش ثبت شد' },
       });
 
+      // Decrement stock only for physical items
       for (const item of cart.items) {
-        await tx.book.update({
-          where: { id: item.bookId },
-          data: { stock: { decrement: item.quantity } },
-        });
+        if (item.book.format !== 'DIGITAL') {
+          await tx.book.update({
+            where: { id: item.bookId },
+            data: { stock: { decrement: item.quantity } },
+          });
+        }
+      }
+
+      // Create ebook purchase records for digital items
+      for (const item of cart.items) {
+        if (item.book.format === 'DIGITAL' || item.book.format === 'BOTH') {
+          await tx.ebookPurchase.upsert({
+            where: { userId_bookId: { userId, bookId: item.bookId } },
+            create: { userId, orderId: newOrder.id, bookId: item.bookId },
+            update: { orderId: newOrder.id },
+          });
+        }
       }
 
       await tx.cartItem.deleteMany({ where: { cartId: cart.id } });
-
       return newOrder;
     });
 
@@ -91,11 +114,8 @@ export class OrdersService {
           }),
         );
         await this.emailService.sendOrderConfirmation({
-          id: order.id,
-          email: user.email,
-          firstName: user.firstName,
-          items,
-          totalAmount: Number(order.totalAmount),
+          id: order.id, email: user.email, firstName: user.firstName,
+          items, totalAmount: Number(order.totalAmount),
         });
       }
     } catch {

@@ -27,10 +27,10 @@ export class BooksService {
   ) {}
 
   async findAll(query: QueryBooksDto) {
-    const { search, category, minPrice, maxPrice, page = 1, limit = 20 } = query;
+    const { search, category, format, minPrice, maxPrice, page = 1, limit = 20 } = query;
     const skip = (page - 1) * limit;
 
-    const cacheKey = `books:${search || ''}:${category || ''}:${minPrice || ''}:${maxPrice || ''}:${page}:${limit}`;
+    const cacheKey = `books:${search || ''}:${category || ''}:${format || ''}:${minPrice || ''}:${maxPrice || ''}:${page}:${limit}`;
     const cached = await this.redis.get<any>(cacheKey);
     if (cached) return cached;
 
@@ -46,6 +46,7 @@ export class BooksService {
       ...(category && {
         categories: { some: { category: { slug: category } } },
       }),
+      ...(format && { format }),
       ...((minPrice || maxPrice) && {
         price: {
           ...(minPrice && { gte: minPrice }),

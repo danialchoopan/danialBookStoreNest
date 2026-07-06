@@ -15,6 +15,8 @@ interface Book {
   images: string[] | string;
   averageRating: number | null;
   seller: { shopName: string };
+  format?: string;
+  ebookPrice?: number;
 }
 
 function parseImages(images: string[] | string): string[] {
@@ -70,6 +72,15 @@ export default function BookCard({ book }: { book: Book }) {
             </span>
           </div>
         )}
+        {book.format && book.format !== 'PHYSICAL' && (
+          <div className="absolute top-3 left-3">
+            <span className={`text-white text-xs font-bold px-2.5 py-1 rounded-lg shadow-lg ${
+              book.format === 'DIGITAL' ? 'bg-emerald-500' : 'bg-blue-500'
+            }`}>
+              {book.format === 'DIGITAL' ? 'PDF' : book.format === 'BOTH' ? 'PDF + فیزیکی' : 'فیزیکی'}
+            </span>
+          </div>
+        )}
         <div className="absolute bottom-3 left-3">
           <span className="bg-white/90 backdrop-blur-sm text-gray-600 text-xs px-2 py-1 rounded-md">
             {book.seller.shopName}
@@ -117,6 +128,11 @@ export default function BookCard({ book }: { book: Book }) {
                 {formatPrice(book.price)}
               </span>
               <span className="text-xs text-gray-400 mr-1">تومان</span>
+              {book.format === 'BOTH' && book.ebookPrice && (
+                <div className="text-xs text-emerald-600 mt-0.5">
+                  PDF: {formatPrice(book.ebookPrice)} تومان
+                </div>
+              )}
             </div>
             {discount && (
               <span className="text-sm text-gray-400 line-through">

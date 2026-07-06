@@ -22,6 +22,17 @@ export class UploadController {
     return this.uploadService.uploadBookImage(file);
   }
 
+  @Post('ebook')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('SELLER')
+  @ApiBearerAuth()
+  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 100 * 1024 * 1024 } }))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'آپلود فایل PDF کتاب الکترونیکی' })
+  uploadEbook(@UploadedFile() file: Express.Multer.File) {
+    return this.uploadService.uploadEbook(file);
+  }
+
   @Post('book/multiple')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('SELLER')

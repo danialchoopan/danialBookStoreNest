@@ -16,12 +16,13 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
-import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // All routes prefixed with /api (e.g., /api/books)
   app.setGlobalPrefix('api');
@@ -31,6 +32,9 @@ async function bootstrap() {
     origin: ['http://localhost:3000', 'http://localhost:3001'],
     credentials: true,
   });
+
+  // Serve uploaded files (book images)
+  app.useStaticAssets(join(process.cwd(), 'uploads'), { prefix: '/uploads' });
 
   // Global middleware - applied to ALL routes
   app.useGlobalFilters(new AllExceptionsFilter());       // Catch errors → Persian messages

@@ -9,9 +9,11 @@ export default function BooksPage() {
   const searchParams = useSearchParams();
   const initialSearch = searchParams.get('search') || '';
   const initialCategory = searchParams.get('category') || '';
+  const initialFormat = searchParams.get('format') || '';
 
   const [search, setSearch] = useState(initialSearch);
   const [category, setCategory] = useState(initialCategory);
+  const [format, setFormat] = useState(initialFormat);
   const [page, setPage] = useState(1);
 
   const categories = [
@@ -83,12 +85,37 @@ export default function BooksPage() {
                 ))}
               </div>
             </div>
+
+            {/* Format Filter */}
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-3">نوع کتاب</label>
+              <div className="flex gap-2 flex-wrap">
+                {[
+                  { value: '', label: 'همه' },
+                  { value: 'PHYSICAL', label: 'فیزیکی' },
+                  { value: 'DIGITAL', label: 'PDF' },
+                  { value: 'BOTH', label: 'هر دو' },
+                ].map((f) => (
+                  <button
+                    key={f.value}
+                    onClick={() => { setFormat(f.value); setPage(1); }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                      format === f.value
+                        ? 'bg-primary-600 text-white'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </aside>
 
         {/* Books Grid */}
         <div className="flex-1">
-          <BookGrid search={search} category={category} page={page} />
+          <BookGrid search={search} category={category} format={format} page={page} />
           {/* Pagination handled inside BookGrid via page prop */}
         </div>
       </div>

@@ -8,17 +8,19 @@ import Pagination from '../ui/Pagination';
 interface Props {
   search?: string;
   category?: string;
+  format?: string;
   page?: number;
   limit?: number;
 }
 
-export default function BookGrid({ search, category, page = 1, limit = 12 }: Props) {
+export default function BookGrid({ search, category, format, page = 1, limit = 12 }: Props) {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['books', search, category, page],
+    queryKey: ['books', search, category, format, page],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (search) params.set('search', search);
       if (category) params.set('category', category);
+      if (format) params.set('format', format);
       params.set('page', page.toString());
       params.set('limit', limit.toString());
       const { data } = await api.get(`/books?${params.toString()}`);

@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsNumber, Min } from 'class-validator';
+import { IsOptional, IsString, IsNumber, Min, IsIn } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class QueryBooksDto {
@@ -9,6 +9,10 @@ export class QueryBooksDto {
   @IsOptional()
   @IsString()
   category?: string;
+
+  @IsOptional()
+  @IsIn(['PHYSICAL', 'DIGITAL', 'BOTH'])
+  format?: string;
 
   @IsOptional()
   @Type(() => Number)

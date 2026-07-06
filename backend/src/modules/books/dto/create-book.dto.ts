@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsBoolean, IsArray, Min } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsBoolean, IsArray, Min, IsIn } from 'class-validator';
 
 export class CreateBookDto {
   @IsString()
@@ -28,9 +28,10 @@ export class CreateBookDto {
   @Min(0)
   comparePrice?: number;
 
+  @IsOptional()
   @IsNumber()
   @Min(0)
-  stock: number;
+  stock?: number;
 
   @IsOptional()
   images?: string | string[];
@@ -43,4 +44,21 @@ export class CreateBookDto {
   @IsArray()
   @IsString({ each: true })
   categoryIds?: string[];
+
+  @IsOptional()
+  @IsIn(['PHYSICAL', 'DIGITAL', 'BOTH'])
+  format?: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  ebookPrice?: number;
+
+  @IsOptional()
+  @IsString()
+  ebookFileUrl?: string;
+
+  @IsOptional()
+  @IsNumber()
+  ebookFileSize?: number;
 }

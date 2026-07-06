@@ -8,23 +8,24 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  password      String
-  firstName     String
-  lastName      String
-  phone         String?   @unique
-  role          String    @default("CUSTOMER")
-  avatar        String?
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id              String    @id @default(cuid())
+  email           String    @unique
+  password        String
+  firstName       String
+  lastName        String
+  phone           String?   @unique
+  role            String    @default("CUSTOMER")
+  avatar          String?
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-  sellerProfile SellerProfile?
-  orders        Order[]
-  cart          Cart?
-  reviews       Review[]
-  wishlist      Wishlist[]
+  sellerProfile   SellerProfile?
+  orders          Order[]
+  cart            Cart?
+  reviews         Review[]
+  wishlist        Wishlist[]
+  ebookPurchases  EbookPurchase[]
 }
 
 model SellerProfile {
@@ -46,28 +47,33 @@ model SellerProfile {
 }
 
 model Book {
-  id            String    @id @default(cuid())
-  sellerId      String
-  title         String
-  slug          String    @unique
-  isbn          String?   @unique
-  author        String
-  publisher     String?
-  description   String?
-  price         Float
-  comparePrice  Float?
-  stock         Int       @default(0)
-  images        String    @default("[]")
-  isPublished   Boolean   @default(false)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id              String    @id @default(cuid())
+  sellerId        String
+  title           String
+  slug            String    @unique
+  isbn            String?   @unique
+  author          String
+  publisher       String?
+  description     String?
+  price           Float
+  comparePrice    Float?
+  stock           Int?      @default(0)
+  images          String    @default("[]")
+  isPublished     Boolean   @default(false)
+  format          String    @default("BOTH")    // PHYSICAL | DIGITAL | BOTH
+  ebookPrice      Float?
+  ebookFileUrl    String?
+  ebookFileSize   Int?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-  seller        SellerProfile  @relation(fields: [sellerId], references: [id])
-  categories    BookCategory[]
-  cartItems     CartItem[]
-  orderItems    OrderItem[]
-  reviews       Review[]
-  wishlist      Wishlist[]
+  seller          SellerProfile  @relation(fields: [sellerId], references: [id])
+  categories      BookCategory[]
+  cartItems       CartItem[]
+  orderItems      OrderItem[]
+  reviews         Review[]
+  wishlist        Wishlist[]
+  ebookPurchases  EbookPurchase[]
 }
 
 model Category {
@@ -188,4 +194,18 @@ model OrderStatusHistory {
   createdAt DateTime @default(now())
 
   order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model EbookPurchase {
+  id            String   @id @default(cuid())
+  userId        String
+  orderId       String
+  bookId        String
+  downloadCount Int      @default(0)
+  createdAt     DateTime @default(now())
+
+  user          User     @relation(fields: [userId], references: [id])
+  book          Book     @relation(fields: [bookId], references: [id])
+
+  @@unique([userId, bookId])
 }

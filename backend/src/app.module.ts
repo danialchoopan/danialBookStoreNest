@@ -17,6 +17,7 @@ import { WishlistModule } from './modules/wishlist/wishlist.module';
 import { EmailModule } from './modules/email/email.module';
 import { SearchModule } from './modules/search/search.module';
 import { ReportsModule } from './modules/reports/reports.module';
+import { DownloadsModule } from './modules/downloads/downloads.module';
 import { WebSocketModule } from './common/websocket/websocket.module';
 
 @Module({
@@ -40,6 +41,7 @@ import { WebSocketModule } from './common/websocket/websocket.module';
     WishlistModule,
     SearchModule,
     ReportsModule,
+    DownloadsModule,
   ],
 })
 export class AppModule {}

@@ -66,8 +66,13 @@ export class CartService {
       throw new NotFoundException('کتاب یافت نشد');
     }
 
-    if (book.stock < quantity) {
-      throw new BadRequestException('موجودی کتاب کافی نیست');
+    const isDigital = book.format === 'DIGITAL';
+
+    // Digital books are always quantity 1, no stock check
+    if (!isDigital) {
+      if (book.stock != null && book.stock < quantity) {
+        throw new BadRequestException('موجودی کتاب کافی نیست');
+      }
     }
 
     const cart = await this.prisma.cart.upsert({
@@ -81,8 +86,11 @@ export class CartService {
     });
 
     if (existingItem) {
+      if (isDigital) {
+        throw new BadRequestException('این کتاب الکترونیکی قبلاً به سبد اضافه شده');
+      }
       const newQty = existingItem.quantity + quantity;
-      if (newQty > book.stock) {
+      if (book.stock != null && newQty > book.stock) {
         throw new BadRequestException('موجودی کتاب کافی نیست');
       }
       await this.prisma.cartItem.update({
@@ -91,7 +99,7 @@ export class CartService {
       });
     } else {
       await this.prisma.cartItem.create({
-        data: { cartId: cart.id, bookId, quantity },
+        data: { cartId: cart.id, bookId, quantity: isDigital ? 1 : quantity },
       });
     }
 
@@ -117,7 +125,12 @@ export class CartService {
       throw new NotFoundException('آیتم سبد خرید یافت نشد');
     }
 
-    if (quantity > item.book.stock) {
+    // Digital books can't change quantity
+    if (item.book.format === 'DIGITAL') {
+      throw new BadRequestException('تعداد کتاب الکترونیکی قابل تغییر نیست');
+    }
+
+    if (item.book.stock != null && quantity > item.book.stock) {
       throw new BadRequestException('موجودی کتاب کافی نیست');
     }
 

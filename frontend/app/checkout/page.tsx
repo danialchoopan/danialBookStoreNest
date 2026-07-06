@@ -14,8 +14,9 @@ export default function CheckoutPage() {
   const { items, totalAmount, fetchCart } = useCartStore();
   const { isAuthenticated, user } = useAuthStore();
   const router = useRouter();
+  const allDigital = items.every((item: any) => item.book?.format === 'DIGITAL');
   const [isLoading, setIsLoading] = useState(false);
-  const [step, setStep] = useState<Step>('address');
+  const [step, setStep] = useState<Step>(allDigital ? 'review' : 'address');
   const [orderId, setOrderId] = useState('');
   const [address, setAddress] = useState({
     fullName: user ? `${user.firstName} ${user.lastName}` : '',
@@ -35,7 +36,7 @@ export default function CheckoutPage() {
     setIsLoading(true);
     try {
       const { data } = await api.post('/orders', {
-        shippingAddress: address,
+        shippingAddress: allDigital ? undefined : address,
         note: note || undefined,
       });
       setOrderId(data.id);
@@ -47,6 +48,9 @@ export default function CheckoutPage() {
       setIsLoading(false);
     }
   };
+
+  // Skip address step for digital-only orders
+  const startStep = allDigital ? 'review' as Step : 'address' as Step;
 
   if (!isAuthenticated) {
     return (
@@ -89,18 +93,35 @@ export default function CheckoutPage() {
           <p className="font-mono text-lg font-bold text-primary-600 mb-6 bg-primary-50 py-2 px-4 rounded-xl inline-block">
             {orderId.slice(0, 12)}...
           </p>
-          <p className="text-gray-500 mb-8 leading-relaxed">
-            سفارش شما با موفقیت ثبت شد و به زودی پردازش خواهد شد.
-            <br />
-            می‌توانید وضعیت سفارش را از بخش «سفارشات من» پیگیری کنید.
-          </p>
+          {allDigital ? (
+            <p className="text-gray-500 mb-8 leading-relaxed">
+              کتاب‌های الکترونیکی شما آماده دانلود هستند.
+              <br />
+              می‌توانید آن‌ها را از بخش «کتابخانه من» دانلود و مطالعه کنید.
+            </p>
+          ) : (
+            <p className="text-gray-500 mb-8 leading-relaxed">
+              سفارش شما با موفقیت ثبت شد و به زودی پردازش خواهد شد.
+              <br />
+              می‌توانید وضعیت سفارش را از بخش «سفارشات من» پیگیری کنید.
+            </p>
+          )}
           <div className="flex gap-3 justify-center">
-            <Link
-              href="/orders"
-              className="bg-primary-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-primary-700 transition-all"
-            >
-              مشاهده سفارشات
-            </Link>
+            {allDigital ? (
+              <Link
+                href="/library"
+                className="bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-emerald-700 transition-all"
+              >
+                رفتن به کتابخانه
+              </Link>
+            ) : (
+              <Link
+                href="/orders"
+                className="bg-primary-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-primary-700 transition-all"
+              >
+                مشاهده سفارشات
+              </Link>
+            )}
             <Link
               href="/books"
               className="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-bold hover:bg-gray-200 transition-all"
@@ -125,24 +146,28 @@ export default function CheckoutPage() {
       {/* Step Indicator */}
       <div className="flex items-center justify-center mb-10">
         <div className="flex items-center gap-0">
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${
-            step === 'address' ? 'bg-primary-600 text-white' : 'bg-green-100 text-green-700'
-          }`}>
-            <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-white/20">۱</span>
-            <span className="text-sm font-medium">آدرس ارسال</span>
-          </div>
-          <div className={`w-12 h-0.5 ${step === 'review' || step === 'success' ? 'bg-green-400' : 'bg-gray-200'}`} />
+          {!allDigital && (
+            <>
+              <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${
+                step === 'address' ? 'bg-primary-600 text-white' : 'bg-green-100 text-green-700'
+              }`}>
+                <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-white/20">۱</span>
+                <span className="text-sm font-medium">آدرس ارسال</span>
+              </div>
+              <div className={`w-12 h-0.5 ${step === 'review' || step === 'success' ? 'bg-green-400' : 'bg-gray-200'}`} />
+            </>
+          )}
           <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${
             step === 'review' ? 'bg-primary-600 text-white' : step === 'success' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'
           }`}>
-            <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-white/20">۲</span>
+            <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-white/20">{allDigital ? '۱' : '۲'}</span>
             <span className="text-sm font-medium">بررسی سفارش</span>
           </div>
           <div className={`w-12 h-0.5 ${step === 'success' ? 'bg-green-400' : 'bg-gray-200'}`} />
           <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${
             step === 'success' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'
           }`}>
-            <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-white/20">۳</span>
+            <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-white/20">{allDigital ? '۲' : '۳'}</span>
             <span className="text-sm font-medium">تأیید نهایی</span>
           </div>
         </div>
