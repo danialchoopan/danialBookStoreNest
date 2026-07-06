@@ -31,7 +31,15 @@ export class ReportsController {
       orderBy: { createdAt: 'desc' },
     });
 
-    // Build CSV
+    // Build CSV with proper escaping
+    const escapeCsv = (val: any) => {
+      const str = String(val ?? '');
+      if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
+    };
+
     const headers = ['شماره سفارش', 'تاریخ', 'مشتری', 'ایمیل', 'وضعیت', 'مبلغ', 'تعداد اقلام'];
     const rows = orders.map((order) => [
       order.id.slice(0, 12),
@@ -43,7 +51,7 @@ export class ReportsController {
       order.items.length,
     ]);
 
-    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const csvContent = [headers.map(escapeCsv).join(','), ...rows.map((r) => r.map(escapeCsv).join(','))].join('\n');
 
     // Add BOM for Excel UTF-8 support
     const bom = '\uFEFF';

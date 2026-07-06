@@ -65,16 +65,13 @@ export default function AdminUsersPage() {
   }) || [];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">مدیریت کاربران</h1>
           <p className="text-gray-500 mt-1">{data?.meta?.total || 0} کاربر ثبت‌نام شده</p>
         </div>
-        <Link href="/admin" className="text-gray-600 hover:text-primary-600 text-sm font-medium">
-          ← بازگشت به پنل مدیریت
-        </Link>
       </div>
 
       {/* Filters */}

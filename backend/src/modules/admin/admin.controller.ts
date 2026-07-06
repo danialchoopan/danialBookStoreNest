@@ -28,6 +28,13 @@ export class AdminController {
     return this.adminService.getDashboard();
   }
 
+  @Get('analytics')
+  @ApiOperation({ summary: 'آنالیتیکس پیشرفته' })
+  @ApiQuery({ name: 'days', required: false })
+  getAnalytics(@Query('days') days?: string) {
+    return this.adminService.getAnalytics(days ? parseInt(days, 10) : 30);
+  }
+
   @Get('sellers')
   @ApiOperation({ summary: 'لیست فروشندگان' })
   @ApiQuery({ name: 'page', required: false })
@@ -58,16 +65,38 @@ export class AdminController {
   @ApiOperation({ summary: 'لیست همه سفارشات' })
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'limit', required: false })
-  getAllOrders(@Query('page') page?: number, @Query('limit') limit?: number) {
-    return this.adminService.getAllOrders(page, limit);
+  @ApiQuery({ name: 'status', required: false })
+  @ApiQuery({ name: 'search', required: false })
+  getAllOrders(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+    @Query('status') status?: string,
+    @Query('search') search?: string,
+  ) {
+    return this.adminService.getAllOrders(page, limit, status, search);
+  }
+
+  @Patch('orders/:id/status')
+  @ApiOperation({ summary: 'تغییر وضعیت سفارش' })
+  updateOrderStatus(
+    @Param('id') id: string,
+    @Body('status') status: string,
+    @Body('note') note?: string,
+  ) {
+    return this.adminService.updateOrderStatus(id, status, note);
   }
 
   @Get('reviews')
   @ApiOperation({ summary: 'لیست همه نظرات' })
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'limit', required: false })
-  getAllReviews(@Query('page') page?: number, @Query('limit') limit?: number) {
-    return this.adminService.getAllReviews(page, limit);
+  @ApiQuery({ name: 'rating', required: false })
+  getAllReviews(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+    @Query('rating') rating?: number,
+  ) {
+    return this.adminService.getAllReviews(page, limit, rating);
   }
 
   @Delete('reviews/:id')
