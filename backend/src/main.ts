@@ -34,7 +34,6 @@ async function bootstrap() {
 
   // Global middleware - applied to ALL routes
   app.useGlobalFilters(new AllExceptionsFilter());       // Catch errors → Persian messages
-  app.useGlobalInterceptors(new TransformInterceptor()); // Wrap responses in { data, success, timestamp }
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,            // Strip unknown properties from DTOs
