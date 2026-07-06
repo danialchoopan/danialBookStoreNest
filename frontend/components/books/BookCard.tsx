@@ -77,7 +77,7 @@ export default function BookCard({ book }: { book: Book }) {
             <span className={`text-white text-xs font-bold px-2.5 py-1 rounded-lg shadow-lg ${
               book.format === 'DIGITAL' ? 'bg-emerald-500' : 'bg-blue-500'
             }`}>
-              {book.format === 'DIGITAL' ? 'PDF' : book.format === 'BOTH' ? 'PDF + فیزیکی' : 'فیزیکی'}
+              {book.ebookPrice === 0 ? 'رایگان' : book.format === 'DIGITAL' ? 'PDF' : book.format === 'BOTH' ? 'PDF + فیزیکی' : 'فیزیکی'}
             </span>
           </div>
         )}
@@ -128,9 +128,9 @@ export default function BookCard({ book }: { book: Book }) {
                 {formatPrice(book.price)}
               </span>
               <span className="text-xs text-gray-400 mr-1">تومان</span>
-              {book.format === 'BOTH' && book.ebookPrice && (
+              {book.format === 'BOTH' && book.ebookPrice !== undefined && book.ebookPrice !== null && (
                 <div className="text-xs text-emerald-600 mt-0.5">
-                  PDF: {formatPrice(book.ebookPrice)} تومان
+                  PDF: {book.ebookPrice === 0 ? 'رایگان' : `${formatPrice(book.ebookPrice)} تومان`}
                 </div>
               )}
             </div>

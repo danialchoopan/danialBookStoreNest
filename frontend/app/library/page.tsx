@@ -1,8 +1,10 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import Link from 'next/link';
+import { useAuthStore } from '@/lib/store';
 
 const formatSize = (bytes: number) => {
   if (bytes < 1024) return `${bytes} B`;
@@ -11,13 +13,34 @@ const formatSize = (bytes: number) => {
 };
 
 export default function LibraryPage() {
+  const router = useRouter();
+  const { isAuthenticated } = useAuthStore();
+
   const { data: books, isLoading } = useQuery({
     queryKey: ['my-ebooks'],
     queryFn: async () => {
       const { data } = await api.get('/downloads/my-books');
       return data;
     },
+    enabled: isAuthenticated,
   });
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
+        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+          <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+        </div>
+        <h1 className="text-xl font-bold text-gray-800 mb-2">ورود لازم است</h1>
+        <p className="text-gray-500 mb-6">برای دسترسی به کتابخانه ابتدا وارد شوید</p>
+        <Link href="/login" className="bg-primary-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-primary-700">
+          ورود به حساب
+        </Link>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (

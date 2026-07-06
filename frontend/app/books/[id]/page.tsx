@@ -45,7 +45,13 @@ export default function BookDetailPage() {
     }
     try {
       await addItem(book.id, selectedFormat === 'DIGITAL' ? 1 : quantity);
-      toast.success(selectedFormat === 'DIGITAL' ? 'کتاب الکترونیکی به سبد اضافه شد' : `${quantity} نسخه به سبد خرید اضافه شد`);
+      if (selectedFormat === 'DIGITAL' && isFreeEbook) {
+        toast.success('کتاب رایگان به سبد اضافه شد');
+      } else if (selectedFormat === 'DIGITAL') {
+        toast.success('کتاب الکترونیکی به سبد اضافه شد');
+      } else {
+        toast.success(`${quantity} نسخه به سبد خرید اضافه شد`);
+      }
     } catch {
       toast.error('خطا در افزودن به سبد خرید');
     }
@@ -61,7 +67,10 @@ export default function BookDetailPage() {
 
   const hasPhysical = book?.format === 'PHYSICAL' || book?.format === 'BOTH';
   const hasDigital = book?.format === 'DIGITAL' || book?.format === 'BOTH';
-  const activePrice = selectedFormat === 'DIGITAL' && book?.ebookPrice ? book.ebookPrice : book?.price;
+  const isFreeEbook = hasDigital && book?.ebookPrice === 0;
+  const activePrice = selectedFormat === 'DIGITAL'
+    ? (book?.ebookPrice ?? book?.price ?? 0)
+    : (book?.price ?? 0);
 
   if (isLoading) {
     return (
@@ -218,10 +227,16 @@ export default function BookDetailPage() {
             {/* Price */}
             <div className="flex items-end gap-4 mb-4">
               <div>
-                <span className={`text-4xl font-bold ${selectedFormat === 'DIGITAL' ? 'text-emerald-600' : 'text-primary-600'}`}>
-                  {activePrice ? formatPrice(activePrice) : formatPrice(book.price)}
-                </span>
-                <span className="text-sm text-gray-400 mr-2">تومان</span>
+                {isFreeEbook && selectedFormat === 'DIGITAL' ? (
+                  <span className="text-4xl font-bold text-emerald-600">رایگان</span>
+                ) : (
+                  <>
+                    <span className={`text-4xl font-bold ${selectedFormat === 'DIGITAL' ? 'text-emerald-600' : 'text-primary-600'}`}>
+                      {formatPrice(activePrice)}
+                    </span>
+                    <span className="text-sm text-gray-400 mr-2">تومان</span>
+                  </>
+                )}
               </div>
               {selectedFormat === 'PHYSICAL' && discount && (
                 <div className="flex items-center gap-2">
@@ -284,7 +299,7 @@ export default function BookDetailPage() {
             {selectedFormat === 'DIGITAL' && (
               <button onClick={handleAddToCart} className="w-full bg-emerald-600 text-white py-3.5 rounded-xl font-bold hover:bg-emerald-700 transition-all shadow-sm flex items-center justify-center gap-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                خرید و دانلود فوری
+                {isFreeEbook ? 'دانلود رایگان' : 'خرید و دانلود فوری'}
               </button>
             )}
 
