@@ -19,7 +19,14 @@ export default function LoginPage() {
     try {
       await login(email, password);
       toast.success('ورود موفقیت‌آمیز بود');
-      router.push('/');
+      const { user } = useAuthStore.getState();
+      if (user?.role === 'ADMIN') {
+        router.push('/admin');
+      } else if (user?.role === 'SELLER') {
+        router.push('/seller');
+      } else {
+        router.push('/');
+      }
     } catch {
       toast.error('ایمیل یا رمز عبور اشتباه است');
     } finally {

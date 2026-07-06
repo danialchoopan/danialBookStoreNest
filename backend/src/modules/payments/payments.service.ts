@@ -79,7 +79,7 @@ export class PaymentsService {
       sellerCommissions.set(sellerId, current + commission);
     }
 
-    const results = [];
+    const results: any[] = [];
 
     for (const [sellerId, commission] of sellerCommissions) {
       const result = await this.prisma.$transaction(async (tx) => {

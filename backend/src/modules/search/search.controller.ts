@@ -27,8 +27,8 @@ export class SearchController {
       where: {
         isPublished: true,
         OR: [
-          { title: { contains: query, mode: 'insensitive' } },
-          { author: { contains: query, mode: 'insensitive' } },
+          { title: { contains: query } },
+          { author: { contains: query } },
           { isbn: { contains: query } },
         ],
       },
@@ -45,7 +45,7 @@ export class SearchController {
 
     const categories = await this.prisma.category.findMany({
       where: {
-        name: { contains: query, mode: 'insensitive' },
+        name: { contains: query },
       },
       select: { id: true, name: true, slug: true },
       take: 4,

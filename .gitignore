@@ -40,3 +40,10 @@ coverage/
 
 # Misc
 *.tsbuildinfo
+
+# Logs
+*.log
+
+# SQLite
+*.db
+*.db-journal

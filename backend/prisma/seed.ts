@@ -125,7 +125,7 @@ async function main() {
     { title: 'گلستان سعدی', author: 'سعدی شیرازی', publisher: 'انتشارات امیرکبیر', isbn: '978-964-448-151-4', price: 48000, stock: 80, sellerIdx: 0, catIdx: [0, 10], desc: 'اثر جاودان سعدی با توضیحات و حواشی علمی.' },
   ];
 
-  const allBooks = [];
+  const allBooks: any[] = [];
   for (const bookData of booksData) {
     const book = await prisma.book.create({
       data: {

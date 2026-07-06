@@ -38,8 +38,8 @@ export class BooksService {
       isPublished: true,
       ...(search && {
         OR: [
-          { title: { contains: search, mode: 'insensitive' } },
-          { author: { contains: search, mode: 'insensitive' } },
+          { title: { contains: search } },
+          { author: { contains: search } },
           { isbn: { contains: search } },
         ],
       }),
@@ -124,16 +124,17 @@ export class BooksService {
       .replace(/[^a-z0-9\u0600-\u06FF]+/g, '-')
       .replace(/^-|-$/g, '');
 
+    const { categoryIds, ...bookData } = dto;
     const book = await this.prisma.book.create({
       data: {
         sellerId: sellerProfile.id,
-        ...dto,
+        ...bookData,
         slug,
-        images: dto.images
-          ? JSON.stringify(Array.isArray(dto.images) ? dto.images : [dto.images])
+        images: bookData.images
+          ? JSON.stringify(Array.isArray(bookData.images) ? bookData.images : [bookData.images])
           : '[]',
-        categories: dto.categoryIds?.length
-          ? { create: dto.categoryIds.map((categoryId) => ({ categoryId })) }
+        categories: categoryIds?.length
+          ? { create: categoryIds.map((categoryId) => ({ categoryId })) }
           : undefined,
       },
       include: { categories: { include: { category: true } } },
@@ -158,13 +159,16 @@ export class BooksService {
       await this.prisma.bookCategory.deleteMany({ where: { bookId } });
     }
 
+    const { categoryIds, images, ...bookData } = dto;
     const updated = await this.prisma.book.update({
       where: { id: bookId },
       data: {
-        ...dto,
-        categoryIds: undefined,
-        ...(dto.categoryIds && {
-          categories: { create: dto.categoryIds.map((categoryId) => ({ categoryId })) },
+        ...bookData,
+        ...(images !== undefined && {
+          images: JSON.stringify(Array.isArray(images) ? images : [images]),
+        }),
+        ...(categoryIds && {
+          categories: { create: categoryIds.map((categoryId) => ({ categoryId })) },
         }),
       },
       include: { categories: { include: { category: true } } },

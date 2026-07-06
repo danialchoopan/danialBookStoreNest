@@ -49,7 +49,7 @@ export class UploadService {
   }
 
   async uploadMultiple(files: Express.Multer.File[]): Promise<{ url: string; filename: string }[]> {
-    const results = [];
+    const results: { url: string; filename: string }[] = [];
     for (const file of files) {
       const result = await this.uploadBookImage(file);
       results.push(result);
