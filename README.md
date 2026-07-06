@@ -2,6 +2,8 @@
 
 > A full-stack multi-vendor bookstore with Persian RTL UI, built with Next.js + NestJS + SQLite (no Docker required).
 
+[فارسی](README_FA.md) | [Setup Guide](docs/SETUP.html) | [Architecture](docs/ARCHITECTURE.html) | [API Reference](docs/API.html) | [Swagger](docs/SWAGGER.html)
+
 ---
 
 ## Screenshots
@@ -108,6 +110,22 @@ Full API docs available at **http://localhost:4000/api/docs** (Swagger)
 
 ---
 
+## Documentation
+
+| Doc | Description |
+|-----|-------------|
+| [Setup Guide](docs/SETUP.html) | Step-by-step installation |
+| [Architecture](docs/ARCHITECTURE.html) | System design, data flow |
+| [Backend Guide](docs/BACKEND.html) | NestJS patterns, caching |
+| [Frontend Guide](docs/FRONTEND.html) | Next.js, RTL, state management |
+| [Database](docs/DATABASE.html) | Schema, relationships |
+| [API Reference](docs/API.html) | All endpoints documented |
+| [Swagger Guide](docs/SWAGGER.html) | How to test auth in Swagger |
+| [Development](docs/DEVELOPMENT.html) | Conventions, adding features |
+| [Deployment](docs/DEPLOYMENT.html) | Docker, production |
+
+---
+
 ## License
 
 MIT
@@ -196,6 +214,22 @@ danialBookStoreNest/
 | مدیر | admin@booknest.ir | admin123 |
 | فروشنده | seller1@booknest.ir | seller123 |
 | کاربر | customer1@booknest.ir | customer123 |
+
+---
+
+## مستندات
+
+| سند | توضیحات |
+|-----|---------|
+| [راهنمای نصب](docs/SETUP.html) | راه‌اندازی گام به گام |
+| [معماری](docs/ARCHITECTURE.html) | طراحی سیستم، جریان داده |
+| [راهنمای بک‌اند](docs/BACKEND.html) | الگوهای NestJS، کشینگ |
+| [راهنمای فانتند](docs/FRONTEND.html) | Next.js، RTL، مدیریت state |
+| [پایگاه داده](docs/DATABASE.html) | اسکیما، روابط |
+| [مرجع API](docs/API.html) | مستندات تمام endpointها |
+| [راهنمای Swagger](docs/SWAGGER.html) | تست احراز هویت در Swagger |
+| [توسعه](docs/DEVELOPMENT.html) | قراردادها، افزودن قابلیت |
+| [استقرار](docs/DEPLOYMENT.html) | Docker، تولید |
 
 ---
 
