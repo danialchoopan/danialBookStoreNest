@@ -1,0 +1,43 @@
+name: Daily Sync
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Configure Git
+        run: |
+          git config user.name "danialch"
+          git config user.email "danialchpan@gmail.com"
+          
+      - name: Run Daily Sync
+        run: |
+          chmod +x .github/scripts/daily-sync.sh
+          bash .github/scripts/daily-sync.sh
+          
+      - name: Safe Push
+        run: |
+          MAX_RETRIES=5
+          RETRY=0
+          while [ $RETRY -lt $MAX_RETRIES ]; do
+            if git push origin main --force-with-lease; then
+              exit 0
+            fi
+            RETRY=$((RETRY + 1))
+            git pull origin main --rebase --autostash
+            sleep $((RANDOM % 30 + 10))
+          done
+          echo "Push failed after $MAX_RETRIES retries"
+          exit 1
+          
