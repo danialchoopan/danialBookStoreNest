@@ -8,6 +8,10 @@ on:
     - cron: '33 21 * * *'
   workflow_dispatch:
 
+concurrency:
+  group: daily-sync
+  cancel-in-progress: false
+
 jobs:
   sync:
     runs-on: ubuntu-latest
@@ -39,7 +43,7 @@ jobs:
             fi
             RETRY=$((RETRY + 1))
             git pull origin main --rebase --autostash
-            sleep $((RANDOM % 30 + 10))
+            sleep $((RANDOM % 10 + 5))
           done
           echo "Push failed after $MAX_RETRIES retries"
           exit 1
