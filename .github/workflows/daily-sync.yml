@@ -2,7 +2,10 @@ name: Daily Sync
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '17 3 * * *'
+    - cron: '42 9 * * *'
+    - cron: '8 15 * * *'
+    - cron: '33 21 * * *'
   workflow_dispatch:
 
 jobs:
@@ -40,4 +43,3 @@ jobs:
           done
           echo "Push failed after $MAX_RETRIES retries"
           exit 1
-          

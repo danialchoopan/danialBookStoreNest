@@ -6,9 +6,6 @@ git config user.email "danialchpan@gmail.com"
 
 RANDOM=$(date +%s%N)
 
-DELAY=$((RANDOM % 72000))
-sleep $DELAY
-
 update_types=(
     "docs"
     "refactor"
@@ -148,6 +145,11 @@ create_random_update() {
         echo "Type: $(random_element "documentation" "comment" "config")" >> .temp-$random_num.md
     fi
 }
+
+SHOULD_RUN=$((RANDOM % 4))
+if [ $SHOULD_RUN -ne 0 ]; then
+    exit 0
+fi
 
 OPTIONS=(1 2 2 4 4 4)
 NUM_UPDATES=${OPTIONS[$RANDOM % ${#OPTIONS[@]}]}
