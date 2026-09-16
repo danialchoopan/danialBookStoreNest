@@ -1,0 +1,4 @@
+Bug fix: Optimize queries
+Fixed by: danialch
+Severity: critical
+Status: resolved
