@@ -4,9 +4,12 @@ set -euo pipefail
 git config user.name "danialch"
 git config user.email "danialchpan@gmail.com"
 
-RANDOM=$(date +%s%N)
+# Seed RANDOM with nanoseconds for better entropy, but don't overwrite the built-in
+RANDOM_SEED=$(date +%s%N)
+RANDOM=$((RANDOM_SEED % 32768))
 
-SHOULD_RUN=$((RANDOM % 4))
+# ~50% chance to run each invocation (reduced from 75% skip rate)
+SHOULD_RUN=$((RANDOM % 2))
 if [ $SHOULD_RUN -ne 0 ]; then
   exit 0
 fi
