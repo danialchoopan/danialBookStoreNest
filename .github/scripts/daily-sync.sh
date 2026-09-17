@@ -147,10 +147,12 @@ create_random_update() {
   esac
   
   if [ $(($RANDOM % 2)) -eq 0 ]; then
-    echo "# Additional update $random_num" > .temp-$random_num.md
-    echo "Content generated: $date $time" >> .temp-$random_num.md
-    echo "Author: danialch" >> .temp-$random_num.md
-    echo "Type: $(random_element "documentation" "comment" "config")" >> .temp-$random_num.md
+    local extra_type=$(random_element "chores" "fixes" "updates")
+    mkdir -p .$extra_type
+    echo "# Additional update $random_num" > .$extra_type/extra-$date-$random_num.md
+    echo "Content generated: $date $time" >> .$extra_type/extra-$date-$random_num.md
+    echo "Author: danialch" >> .$extra_type/extra-$date-$random_num.md
+    echo "Type: $(random_element "documentation" "comment" "config")" >> .$extra_type/extra-$date-$random_num.md
   fi
 }
 
