@@ -1,0 +1,4 @@
+New feature: Add unit tests
+Implemented by: danialch
+Priority: medium
+Status: reviewed
