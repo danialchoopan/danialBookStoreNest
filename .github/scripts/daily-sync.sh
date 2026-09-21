@@ -4,14 +4,7 @@ set -euo pipefail
 git config user.name "danialch"
 git config user.email "danialchpan@gmail.com"
 
-if [ "${FORCE_RUN:-0}" != "1" ]; then
-  SKIP_PROBABILITY=75
-  ROLL=$((RANDOM % 100))
-  if [ "$ROLL" -lt "$SKIP_PROBABILITY" ]; then
-    echo "Skipped (roll=$ROLL < $SKIP_PROBABILITY)"
-    exit 0
-  fi
-fi
+
 
 update_types=(
   "docs"
