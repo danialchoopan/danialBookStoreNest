@@ -17,33 +17,41 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
+
       - name: Configure Git
         run: |
           git config user.name "danialch"
           git config user.email "danialchpan@gmail.com"
-          
-      - name: Run Daily Sync
+
+      - name: Daily Sync
         run: |
           chmod +x .github/scripts/daily-sync.sh
           bash .github/scripts/daily-sync.sh
-          
-      - name: Safe Push
+
+      - name: Push
         run: |
+          if [ -z "$(git log origin/main..HEAD --oneline 2>/dev/null)" ]; then
+            echo "No new commits to push"
+            exit 0
+          fi
           MAX_RETRIES=5
           RETRY=0
           while [ $RETRY -lt $MAX_RETRIES ]; do
-            if git push origin main --force-with-lease; then
-              exit 0
+            if git push origin main; then
+              echo "Push succeeded"
+              break
             fi
             RETRY=$((RETRY + 1))
-            git pull origin main --rebase --autostash
+            echo "Push failed, retry $RETRY/$MAX_RETRIES"
             sleep $((RANDOM % 10 + 5))
+            git pull origin main --rebase --autostash 2>/dev/null || true
           done
-          echo "Push failed after $MAX_RETRIES retries"
-          exit 1
+          if [ "$RETRY" -eq "$MAX_RETRIES" ]; then
+            echo "Push failed after $MAX_RETRIES retries"
+            exit 1
+          fi
