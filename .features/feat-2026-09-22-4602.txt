@@ -1,0 +1,4 @@
+New feature: Update API endpoints
+Implemented by: danialch
+Priority: low
+Status: reviewed
