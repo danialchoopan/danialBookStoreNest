@@ -1,0 +1,4 @@
+New feature: Fix formatting issues
+Implemented by: danialch
+Priority: high
+Status: reviewed
