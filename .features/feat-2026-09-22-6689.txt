@@ -1,0 +1,4 @@
+New feature: Refactor code structure
+Implemented by: danialch
+Priority: low
+Status: tested
