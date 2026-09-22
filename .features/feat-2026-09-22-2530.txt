@@ -1,0 +1,4 @@
+New feature: Add validation
+Implemented by: danialch
+Priority: high
+Status: implemented
