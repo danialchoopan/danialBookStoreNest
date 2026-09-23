@@ -1,0 +1,4 @@
+Bug fix: Update error messages
+Fixed by: danialch
+Severity: minor
+Status: deployed
