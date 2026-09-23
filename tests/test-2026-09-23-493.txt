@@ -1,0 +1,5 @@
+Test suite updated
+Tests passed: 87
+Coverage: 72%
+Author: danialch
+Test type: e2e
