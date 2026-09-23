@@ -1,0 +1,4 @@
+Bug fix: Update configuration
+Fixed by: danialch
+Severity: critical
+Status: resolved
