@@ -1,0 +1,4 @@
+Bug fix: Add unit tests
+Fixed by: danialch
+Severity: major
+Status: deployed
