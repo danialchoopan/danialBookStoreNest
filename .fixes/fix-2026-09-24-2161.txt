@@ -1,0 +1,4 @@
+Bug fix: Clean up code
+Fixed by: danialch
+Severity: major
+Status: resolved
