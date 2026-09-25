@@ -1,0 +1,4 @@
+Style update: Remove deprecated code
+Formatting changes applied
+Updated by: danialch
+Files affected: 5
