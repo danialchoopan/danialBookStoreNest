@@ -1,0 +1,5 @@
+Test suite updated
+Tests passed: 67
+Coverage: 95%
+Author: danialch
+Test type: unit
