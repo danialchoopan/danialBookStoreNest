@@ -1,0 +1,4 @@
+New feature: Improve logging
+Implemented by: danialch
+Priority: high
+Status: implemented
