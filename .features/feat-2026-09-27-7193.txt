@@ -1,0 +1,4 @@
+New feature: Fix minor bugs
+Implemented by: danialch
+Priority: high
+Status: implemented
