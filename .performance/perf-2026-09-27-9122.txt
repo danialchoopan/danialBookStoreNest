@@ -1,0 +1,4 @@
+Performance improvement: Optimize queries
+Improvement: 18%
+Optimized by: danialch
+Metric: execution-time
