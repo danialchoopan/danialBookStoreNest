@@ -1,0 +1,4 @@
+Bug fix: Improve logging
+Fixed by: danialch
+Severity: minor
+Status: resolved
