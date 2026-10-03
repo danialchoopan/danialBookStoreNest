@@ -1,0 +1,4 @@
+New feature: Update README
+Implemented by: danialch
+Priority: low
+Status: tested
