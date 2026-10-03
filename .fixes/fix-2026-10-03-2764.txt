@@ -1,0 +1,4 @@
+Bug fix: Remove deprecated code
+Fixed by: danialch
+Severity: minor
+Status: resolved
