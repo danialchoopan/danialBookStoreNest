@@ -1,0 +1,4 @@
+Style update: Add error handling
+Formatting changes applied
+Updated by: danialch
+Files affected: 2
