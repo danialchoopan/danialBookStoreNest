@@ -1,0 +1,4 @@
+Performance improvement: Update documentation
+Improvement: 16%
+Optimized by: danialch
+Metric: load-time
