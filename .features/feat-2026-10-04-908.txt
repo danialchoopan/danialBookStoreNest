@@ -1,0 +1,4 @@
+New feature: Clean up code
+Implemented by: danialch
+Priority: high
+Status: reviewed
