@@ -1,0 +1,4 @@
+Performance improvement: Refactor code structure
+Improvement: 18%
+Optimized by: danialch
+Metric: load-time
