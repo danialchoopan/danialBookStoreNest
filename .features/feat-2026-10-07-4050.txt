@@ -1,0 +1,4 @@
+New feature: Update documentation
+Implemented by: danialch
+Priority: medium
+Status: reviewed
