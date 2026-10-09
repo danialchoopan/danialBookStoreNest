@@ -1,0 +1,4 @@
+chore: Update documentation
+Completed at: 20:04:01
+User: danialch
+Status: completed
