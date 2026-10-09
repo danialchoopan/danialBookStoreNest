@@ -1,0 +1,4 @@
+Bug fix: Update dependencies
+Fixed by: danialch
+Severity: minor
+Status: deployed
