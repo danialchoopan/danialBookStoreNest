@@ -1,0 +1,4 @@
+chore: Add error handling
+Completed at: 01:20:49
+User: danialch
+Status: in-progress
