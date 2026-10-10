@@ -1,0 +1,4 @@
+Bug fix: Improve performance
+Fixed by: danialch
+Severity: major
+Status: verified
