@@ -1,0 +1,4 @@
+Performance improvement: Remove deprecated code
+Improvement: 10%
+Optimized by: danialch
+Metric: execution-time
