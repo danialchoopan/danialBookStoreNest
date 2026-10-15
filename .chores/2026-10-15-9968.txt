@@ -1,0 +1,4 @@
+chore: Update API endpoints
+Completed at: 00:01:51
+User: danialch
+Status: in-progress
