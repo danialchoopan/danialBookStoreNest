@@ -1,0 +1,4 @@
+New feature: Optimize queries
+Implemented by: danialch
+Priority: high
+Status: reviewed
