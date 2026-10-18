@@ -1,0 +1,4 @@
+Performance improvement: Clean up code
+Improvement: 16%
+Optimized by: danialch
+Metric: load-time
