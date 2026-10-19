@@ -1,0 +1,4 @@
+Bug fix: Fix minor bugs
+Fixed by: danialch
+Severity: minor
+Status: verified
