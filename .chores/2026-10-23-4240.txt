@@ -1,0 +1,4 @@
+chore: Update API endpoints
+Completed at: 00:05:22
+User: danialch
+Status: verified
