@@ -1,0 +1,4 @@
+chore: Refactor code structure
+Completed at: 08:53:58
+User: danialch
+Status: completed
