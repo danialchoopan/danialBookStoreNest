@@ -1,0 +1,4 @@
+Bug fix: Refactor code structure
+Fixed by: danialch
+Severity: critical
+Status: verified
