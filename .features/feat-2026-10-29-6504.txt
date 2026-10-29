@@ -1,0 +1,4 @@
+New feature: Improve performance
+Implemented by: danialch
+Priority: medium
+Status: tested
