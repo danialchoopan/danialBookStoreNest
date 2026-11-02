@@ -1,0 +1,4 @@
+Bug fix: Add error handling
+Fixed by: danialch
+Severity: critical
+Status: resolved
