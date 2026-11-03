@@ -1,0 +1,4 @@
+chore: Optimize queries
+Completed at: 17:18:54
+User: danialch
+Status: in-progress
