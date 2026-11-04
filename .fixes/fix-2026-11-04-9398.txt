@@ -1,0 +1,4 @@
+Bug fix: Update API endpoints
+Fixed by: danialch
+Severity: minor
+Status: verified
