@@ -1,0 +1,4 @@
+Performance improvement: Update API endpoints
+Improvement: 20%
+Optimized by: danialch
+Metric: load-time
