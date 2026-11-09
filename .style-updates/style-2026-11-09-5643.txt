@@ -1,0 +1,4 @@
+Style update: Clean up code
+Formatting changes applied
+Updated by: danialch
+Files affected: 3
