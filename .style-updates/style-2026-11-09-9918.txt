@@ -1,0 +1,4 @@
+Style update: Update API endpoints
+Formatting changes applied
+Updated by: danialch
+Files affected: 1
