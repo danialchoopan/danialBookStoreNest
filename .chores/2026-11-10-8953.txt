@@ -1,0 +1,4 @@
+chore: Update documentation
+Completed at: 21:15:09
+User: danialch
+Status: verified
