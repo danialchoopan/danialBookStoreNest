@@ -1,0 +1,5 @@
+Test suite updated
+Tests passed: 111
+Coverage: 96%
+Author: danialch
+Test type: integration
