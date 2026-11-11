@@ -1,0 +1,4 @@
+Performance improvement: Improve logging
+Improvement: 20%
+Optimized by: danialch
+Metric: load-time
