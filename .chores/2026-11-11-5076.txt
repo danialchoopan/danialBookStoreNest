@@ -1,0 +1,4 @@
+chore: Add error handling
+Completed at: 01:24:18
+User: danialch
+Status: completed
