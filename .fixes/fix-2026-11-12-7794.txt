@@ -1,0 +1,4 @@
+Bug fix: Update documentation
+Fixed by: danialch
+Severity: critical
+Status: verified
