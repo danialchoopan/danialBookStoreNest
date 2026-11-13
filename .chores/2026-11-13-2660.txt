@@ -1,0 +1,4 @@
+chore: Improve logging
+Completed at: 17:21:55
+User: danialch
+Status: in-progress
