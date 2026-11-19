@@ -1,0 +1,4 @@
+Bug fix: Update README
+Fixed by: danialch
+Severity: major
+Status: deployed
