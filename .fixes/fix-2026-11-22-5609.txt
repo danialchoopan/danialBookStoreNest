@@ -1,0 +1,4 @@
+Bug fix: Fix formatting issues
+Fixed by: danialch
+Severity: minor
+Status: deployed
